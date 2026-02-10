@@ -40,6 +40,12 @@ module.exports.policies = {
   'users/create-api-key': ['is-authenticated', 'is-admin'],
   'users/delete': ['is-authenticated', 'is-admin'],
 
+  'master-tasks/index': 'can-manage-master-tasks',       // Просмотр
+  'master-tasks/create': 'can-manage-master-tasks',      // Создание
+  'master-tasks/update': 'can-manage-master-tasks',      // Обновление/Архивация
+  'master-tasks/delete': 'can-manage-master-tasks',      // Удаление
+  'master-tasks/get-targets': 'can-manage-master-tasks', // Получение списка проектов
+
   'projects/create': ['is-authenticated', 'is-external', 'is-admin-or-project-owner'],
 
   '_internal/update-config': ['is-authenticated', 'is-internal'],

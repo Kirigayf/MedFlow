@@ -267,4 +267,10 @@ module.exports.routes = {
     view: 'index',
     skipAssets: true,
   },
+
+  'GET /api/master-tasks': { action: 'master-tasks/index' },         // Список задач
+  'POST /api/master-tasks': { action: 'master-tasks/create' },       // Создание задачи
+  'GET /api/master-tasks/targets': { action: 'master-tasks/get-targets' },
+  'PATCH /api/master-tasks/:id': { action: 'master-tasks/update' }, // Обновление (Архивация)
+  'DELETE /api/master-tasks/:id': { action: 'master-tasks/delete' }
 };

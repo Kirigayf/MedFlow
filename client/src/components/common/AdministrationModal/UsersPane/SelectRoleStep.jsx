@@ -14,8 +14,10 @@ import { UserRoleIcons } from '../../../../constants/Icons';
 
 import styles from './SelectRoleStep.module.scss';
 
+// 1. Добавляем описание для Модератора
 const DESCRIPTION_BY_ROLE = {
   [UserRoles.ADMIN]: 'common.canManageSystemWideSettingsAndActAsProjectOwner',
+  [UserRoles.MODERATOR]: 'common.canManageCrossProjectTasks', // <--- НОВАЯ СТРОКА
   [UserRoles.PROJECT_OWNER]: 'common.canCreateOwnProjectsAndBeInvitedToWorkInOthers',
   [UserRoles.BOARD_USER]: 'common.canBeInvitedToWorkInBoards',
 };
@@ -58,7 +60,13 @@ const SelectRoleStep = React.memo(
         <Popup.Content>
           <Form onSubmit={handleSubmit}>
             <Menu secondary vertical className={styles.menu}>
-              {[UserRoles.ADMIN, UserRoles.PROJECT_OWNER, UserRoles.BOARD_USER].map((role) => (
+              {/* 2. Добавляем UserRoles.MODERATOR в массив для отрисовки */}
+              {[
+                UserRoles.ADMIN, 
+                UserRoles.MODERATOR, // <--- СЮДА
+                UserRoles.PROJECT_OWNER, 
+                UserRoles.BOARD_USER
+              ].map((role) => (
                 <Menu.Item
                   key={role}
                   value={role}
@@ -66,6 +74,7 @@ const SelectRoleStep = React.memo(
                   className={styles.menuItem}
                   onClick={handleSelectClick}
                 >
+                  {/* Убедитесь, что иконка существует (см. шаг 2 ниже) */}
                   <Icon name={UserRoleIcons[role]} className={styles.menuItemIcon} />
                   <div className={styles.menuItemTitle}>{t(`common.${role}`)}</div>
                   <p className={styles.menuItemDescription}>{t(DESCRIPTION_BY_ROLE[role])}</p>

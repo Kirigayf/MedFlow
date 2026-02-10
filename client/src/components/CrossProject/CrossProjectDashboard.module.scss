@@ -1,0 +1,199 @@
+/* 1. РАСТЯГИВАЕМ КОНТЕЙНЕР */
+.wrapper {
+  padding: 115px 60px 40px 60px; /* Большие отступы по бокам (60px) */
+  max-width: 100%; /* Разрешаем растягиваться на всю ширину */
+  width: 96%; /* Оставляем небольшие поля по краям экрана */
+  margin: 0 auto;
+  min-height: calc(100vh - 60px);
+  color: #e0e0e0;
+}
+
+/* 2. ЗАГОЛОВОК И КНОПКА */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  margin-bottom: 80px; /* Увеличили вертикальный отступ до 80px */
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  h1 {
+    font-weight: 300 !important;
+    letter-spacing: -1px;
+    font-size: 3.5rem !important; /* Крупный заголовок */
+    margin: 0 !important;
+    line-height: 1.1 !important;
+    color: #fff;
+  }
+}
+
+/* 3. ВКЛАДКИ (Меню) */
+.tabs {
+  margin-bottom: 50px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  box-shadow: none !important; 
+  background: transparent !important;
+  width: 100%; /* Линия подчеркивания на всю ширину */
+
+  :global(.item) {
+    color: #666 !important;
+    font-size: 18px !important;
+    padding: 15px 0 !important;
+    margin-right: 50px !important; /* Больше расстояние между словами */
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    transition: color 0.2s ease !important;
+
+    &:hover {
+      color: #ccc !important;
+    }
+
+    &.active {
+      color: #fff !important;
+      font-weight: 500 !important;
+      box-shadow: 0 2px 0 0 #4da6ff !important;
+      border: none !important;
+    }
+  }
+}
+
+.content {
+  position: relative;
+}
+
+/* 4. СЕТКА: ШИРОКИЕ КАРТОЧКИ И БОЛЬШИЕ ОТСТУПЫ */
+.taskList {
+  display: grid;
+  /* Карточки теперь не меньше 450px в ширину (было 400). 
+     Это заставит их выглядеть более вытянутыми и "дорогими". */
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 40px; /* Огромное расстояние между карточками (40px) */
+}
+
+/* 5. СТИЛЬ КАРТОЧКИ */
+.taskCard {
+  background: rgba(30, 32, 36, 0.7) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 20px !important;
+  padding: 35px !important; /* Больше внутреннего пространства */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-5px);
+    background: rgba(35, 37, 41, 0.95) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.15) !important;
+  }
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+
+  h3 {
+    margin: 0;
+    font-size: 22px; /* Чуть крупнее заголовок */
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.5px;
+    line-height: 1.3;
+  }
+}
+
+.description {
+  color: #889096;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 40px; /* Больше отступ до низа */
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.metrics {
+  flex-grow: 1;
+  margin-right: 30px;
+}
+
+.progressText {
+  font-size: 14px;
+  color: #6d7988;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  
+  button {
+    opacity: 0.6;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.05) !important;
+    width: 40px;
+    height: 40px;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% !important; /* Идеальный круг */
+    
+    &:hover {
+      opacity: 1;
+      background: rgba(255,255,255,0.15) !important;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.statusBadge {
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  margin-left: 15px !important;
+  font-weight: 700 !important;
+}
+
+.emptyState {
+  border: 1px dashed rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  min-height: 400px;
+  
+  i.icon {
+    font-size: 56px !important;
+    opacity: 0.2;
+    margin-bottom: 24px !important;
+  }
+
+  h2 {
+    font-weight: 300;
+    font-size: 22px;
+    color: #ddd;
+  }
+}

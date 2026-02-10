@@ -22,6 +22,7 @@ export const UserRoles = {
   ADMIN: 'admin',
   PROJECT_OWNER: 'projectOwner',
   BOARD_USER: 'boardUser',
+  MODERATOR: 'moderator',  
 };
 
 export const ProjectOrders = {

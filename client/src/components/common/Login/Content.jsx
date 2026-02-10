@@ -206,7 +206,7 @@ const Content = React.memo(() => {
               <Header
                 as="h1"
                 textAlign="center"
-                content={bootstrap.instanceName || 'МИАЦы'}
+                content={bootstrap.instanceName || 'БЛАНКА'}
                 className={styles.formTitle}
               />
               <Header
@@ -300,7 +300,7 @@ const Content = React.memo(() => {
                 <Trans i18nKey="common.poweredByPlanka">
                   {'Powered by '}
                   <a href="#" target="_blank" rel="noreferrer">
-                    МИАЦ
+                    БЛАНКА
                   </a>
                 </Trans>
               </p>

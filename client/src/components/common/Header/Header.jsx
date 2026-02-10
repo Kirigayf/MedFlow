@@ -1,8 +1,3 @@
-/*!
- * Copyright (c) 2024 PLANKA Software GmbH
- * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
- */
-
 import React, { useCallback } from 'react';
 import classNames from 'classnames';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -25,6 +20,7 @@ const POPUP_PROPS = {
 };
 
 const Header = React.memo(() => {
+  // ВОТ ЗДЕСЬ переменная называется 'user'
   const user = useSelector(selectors.selectCurrentUser);
   const project = useSelector(selectors.selectCurrentProject);
   const board = useSelector(selectors.selectCurrentBoard);
@@ -33,7 +29,6 @@ const Header = React.memo(() => {
   const isEditModeEnabled = useSelector(selectors.selectIsEditModeEnabled);
 
   const withFavoritesToggler = useSelector(
-    // TODO: use selector instead?
     (state) => selectors.selectFavoriteProjectIdsForCurrentUser(state).length > 0,
   );
 
@@ -96,11 +91,11 @@ const Header = React.memo(() => {
     <div className={styles.wrapper}>
       {!project && (
         <Link to={Paths.ROOT} className={classNames(styles.logo, styles.title)}>
-          МИАЦ
+          БЛАНКА
         </Link>
       )}
       <Menu inverted size="large" className={styles.menu}>
-        {project && (
+        {project ? (
           <Menu.Menu position="left">
             <Menu.Item
               as={Link}
@@ -118,8 +113,24 @@ const Header = React.memo(() => {
               )}
             </Menu.Item>
           </Menu.Menu>
+        ) : (
+          // Добавляем пустой элемент, если нет проекта, чтобы меню справа не смещалось
+           <Menu.Menu position="left" />
         )}
+        
         <Menu.Menu position="right">
+          {/* ИСПРАВЛЕНО: используем 'user' вместо 'currentUser' */}
+          {user && (user.role === 'admin' || user.role === 'moderator') && (
+            <Menu.Item
+              as={Link}
+              to="/cross-projects"
+              className={classNames(styles.item, styles.itemHoverable)}
+              title="Кросс-проектные задачи"
+            >
+              <Icon fitted name="tasks" />
+            </Menu.Item>
+          )}
+
           {withFavoritesToggler && (
             <Menu.Item
               className={classNames(styles.item, styles.itemHoverable)}

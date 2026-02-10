@@ -1,0 +1,1812 @@
+xawa@MacBook-Pro-Yan MedFlow % npx tree-node-cli -I "node_modules|.git|dist|.cache|coverage" -L 8
+MedFlow
+├── Dockerfile
+├── Dockerfile.dev
+├── charts
+│   └── planka
+│       ├── Chart.lock
+│       ├── Chart.yaml
+│       ├── README.md
+│       ├── templates
+│       │   ├── NOTES.txt
+│       │   ├── _helpers.tpl
+│       │   ├── deployment.yaml
+│       │   ├── hpa.yaml
+│       │   ├── ingress.yaml
+│       │   ├── pvc.yaml
+│       │   ├── secret-oidc.yaml
+│       │   ├── service.yaml
+│       │   ├── serviceaccount.yaml
+│       │   └── tests
+│       │       └── test-connection.yaml
+│       └── values.yaml
+├── client
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── patches
+│   │   ├── @diplodoc+transform+4.64.1.patch
+│   │   ├── @gravity-ui+markdown-editor+15.29.0.patch
+│   │   ├── react-mentions+4.4.10.patch
+│   │   ├── react-photoswipe-gallery+2.2.7.patch
+│   │   ├── redux-orm+0.16.2.patch
+│   │   ├── sails.io.js+1.2.1.patch
+│   │   └── semantic-ui-react+2.1.5.patch
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── logo192.png
+│   │   ├── logo512.png
+│   │   ├── manifest.json
+│   │   └── robots.txt
+│   ├── src
+│   │   ├── actions
+│   │   │   ├── activities.js
+│   │   │   ├── attachments.js
+│   │   │   ├── background-images.js
+│   │   │   ├── base-custom-field-groups.js
+│   │   │   ├── board-memberships.js
+│   │   │   ├── boards.js
+│   │   │   ├── bootstrap.js
+│   │   │   ├── cards.js
+│   │   │   ├── comments.js
+│   │   │   ├── config.js
+│   │   │   ├── core.js
+│   │   │   ├── custom-field-groups.js
+│   │   │   ├── custom-field-values.js
+│   │   │   ├── custom-fields.js
+│   │   │   ├── index.js
+│   │   │   ├── labels.js
+│   │   │   ├── lists.js
+│   │   │   ├── login.js
+│   │   │   ├── modals.js
+│   │   │   ├── notification-services.js
+│   │   │   ├── notifications.js
+│   │   │   ├── project-managers.js
+│   │   │   ├── projects.js
+│   │   │   ├── router.js
+│   │   │   ├── socket.js
+│   │   │   ├── task-lists.js
+│   │   │   ├── tasks.js
+│   │   │   ├── users.js
+│   │   │   └── webhooks.js
+│   │   ├── api
+│   │   │   ├── access-tokens.js
+│   │   │   ├── activities.js
+│   │   │   ├── attachments.js
+│   │   │   ├── background-images.js
+│   │   │   ├── base-custom-field-groups.js
+│   │   │   ├── board-memberships.js
+│   │   │   ├── boards.js
+│   │   │   ├── bootstrap.js
+│   │   │   ├── card-labels.js
+│   │   │   ├── card-memberships.js
+│   │   │   ├── cards.js
+│   │   │   ├── comments.js
+│   │   │   ├── config.js
+│   │   │   ├── custom-field-groups.js
+│   │   │   ├── custom-field-values.js
+│   │   │   ├── custom-fields.js
+│   │   │   ├── http.js
+│   │   │   ├── index.js
+│   │   │   ├── labels.js
+│   │   │   ├── lists.js
+│   │   │   ├── notification-services.js
+│   │   │   ├── notifications.js
+│   │   │   ├── project-managers.js
+│   │   │   ├── projects.js
+│   │   │   ├── socket.js
+│   │   │   ├── task-lists.js
+│   │   │   ├── tasks.js
+│   │   │   ├── terms.js
+│   │   │   ├── users.js
+│   │   │   └── webhooks.js
+│   │   ├── assets
+│   │   │   ├── docs
+│   │   │   │   └── whats-new.md
+│   │   │   └── images
+│   │   │       ├── about-logo1.png
+│   │   │       ├── deleted-user.png
+│   │   │       ├── login-cover.jpg
+│   │   │       ├── logo.png
+│   │   │       ├── plus-icon.svg
+│   │   │       └── plus-math-icon.svg
+│   │   ├── components
+│   │   │   ├── activities
+│   │   │   │   ├── BoardActivitiesModal
+│   │   │   │   │   ├── BoardActivitiesModal.jsx
+│   │   │   │   │   ├── BoardActivitiesModal.module.scss
+│   │   │   │   │   ├── Item.jsx
+│   │   │   │   │   ├── Item.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── CardActivities
+│   │   │   │       ├── CardActivities.jsx
+│   │   │   │       ├── CardActivities.module.scss
+│   │   │   │       ├── Item.jsx
+│   │   │   │       ├── Item.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── attachments
+│   │   │   │   ├── AddAttachmentStep
+│   │   │   │   │   ├── AddAttachmentStep.jsx
+│   │   │   │   │   ├── AddAttachmentStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── Attachments
+│   │   │   │       ├── Attachments.jsx
+│   │   │   │       ├── Attachments.module.scss
+│   │   │   │       ├── ContentViewer.jsx
+│   │   │   │       ├── ContentViewer.module.scss
+│   │   │   │       ├── CsvViewer.jsx
+│   │   │   │       ├── CsvViewer.module.scss
+│   │   │   │       ├── EditStep.jsx
+│   │   │   │       ├── EditStep.module.scss
+│   │   │   │       ├── Item.jsx
+│   │   │   │       ├── Item.module.scss
+│   │   │   │       ├── ItemContent.jsx
+│   │   │   │       ├── ItemContent.module.scss
+│   │   │   │       ├── PdfViewer.jsx
+│   │   │   │       ├── PdfViewer.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── base-custom-field-groups
+│   │   │   │   ├── AddBaseCustomFieldGroupStep
+│   │   │   │   │   ├── AddBaseCustomFieldGroupStep.jsx
+│   │   │   │   │   ├── AddBaseCustomFieldGroupStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── BaseCustomFieldGroupChip
+│   │   │   │   │   ├── BaseCustomFieldGroupChip.jsx
+│   │   │   │   │   ├── BaseCustomFieldGroupChip.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── BaseCustomFieldGroupStep
+│   │   │   │       ├── BaseCustomFieldGroupStep.jsx
+│   │   │   │       ├── BaseCustomFieldGroupStep.module.scss
+│   │   │   │       ├── CustomField.jsx
+│   │   │   │       ├── CustomField.module.scss
+│   │   │   │       ├── CustomFieldAddStep.jsx
+│   │   │   │       ├── CustomFieldAddStep.module.scss
+│   │   │   │       ├── CustomFieldEditStep.jsx
+│   │   │   │       ├── CustomFieldEditStep.module.scss
+│   │   │   │       ├── CustomFieldEditor.jsx
+│   │   │   │       ├── CustomFieldEditor.module.scss
+│   │   │   │       ├── EditStep.jsx
+│   │   │   │       ├── EditStep.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── board-memberships
+│   │   │   │   ├── BoardMemberships
+│   │   │   │   │   ├── ActionsStep.jsx
+│   │   │   │   │   ├── ActionsStep.module.scss
+│   │   │   │   │   ├── AddStep
+│   │   │   │   │   │   ├── AddStep.jsx
+│   │   │   │   │   │   ├── AddStep.module.scss
+│   │   │   │   │   │   ├── User.jsx
+│   │   │   │   │   │   ├── User.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── BoardMemberships.jsx
+│   │   │   │   │   ├── BoardMemberships.module.scss
+│   │   │   │   │   ├── Group.jsx
+│   │   │   │   │   ├── Group.module.scss
+│   │   │   │   │   ├── GroupItemsStep.jsx
+│   │   │   │   │   ├── SelectPermissionsStep.jsx
+│   │   │   │   │   ├── SelectPermissionsStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── BoardMembershipsStep.jsx
+│   │   │   │   └── PureBoardMembershipsStep
+│   │   │   │       ├── Item.jsx
+│   │   │   │       ├── Item.module.scss
+│   │   │   │       ├── PureBoardMembershipsStep.jsx
+│   │   │   │       ├── PureBoardMembershipsStep.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── boards
+│   │   │   │   ├── AddBoardStep
+│   │   │   │   │   ├── AddBoardStep.jsx
+│   │   │   │   │   ├── AddBoardStep.module.scss
+│   │   │   │   │   ├── ImportStep.jsx
+│   │   │   │   │   ├── ImportStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Board
+│   │   │   │   │   ├── Board.jsx
+│   │   │   │   │   ├── EndlessContent.jsx
+│   │   │   │   │   ├── FiniteContent.jsx
+│   │   │   │   │   ├── GridView.jsx
+│   │   │   │   │   ├── GridView.module.scss
+│   │   │   │   │   ├── KanbanContent
+│   │   │   │   │   │   ├── AddList.jsx
+│   │   │   │   │   │   ├── AddList.module.scss
+│   │   │   │   │   │   ├── KanbanContent.jsx
+│   │   │   │   │   │   ├── KanbanContent.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── ListView.jsx
+│   │   │   │   │   ├── ListView.module.scss
+│   │   │   │   │   ├── ShortcutsProvider.jsx
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── BoardActions
+│   │   │   │   │   ├── BoardActions.jsx
+│   │   │   │   │   ├── BoardActions.module.scss
+│   │   │   │   │   ├── Filters.jsx
+│   │   │   │   │   ├── Filters.module.scss
+│   │   │   │   │   ├── RightSide
+│   │   │   │   │   │   ├── ActionsStep.jsx
+│   │   │   │   │   │   ├── ActionsStep.module.scss
+│   │   │   │   │   │   ├── RightSide.jsx
+│   │   │   │   │   │   ├── RightSide.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── BoardSettingsModal
+│   │   │   │   │   ├── BoardSettingsModal.jsx
+│   │   │   │   │   ├── GeneralPane
+│   │   │   │   │   │   ├── EditInformation.jsx
+│   │   │   │   │   │   ├── EditInformation.module.scss
+│   │   │   │   │   │   ├── GeneralPane.jsx
+│   │   │   │   │   │   ├── GeneralPane.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── NotificationsPane.jsx
+│   │   │   │   │   ├── NotificationsPane.module.scss
+│   │   │   │   │   ├── PreferencesPane
+│   │   │   │   │   │   ├── DefaultCardType.jsx
+│   │   │   │   │   │   ├── DefaultCardType.module.scss
+│   │   │   │   │   │   ├── DefaultView.jsx
+│   │   │   │   │   │   ├── DefaultView.module.scss
+│   │   │   │   │   │   ├── Others.jsx
+│   │   │   │   │   │   ├── Others.module.scss
+│   │   │   │   │   │   ├── PreferencesPane.jsx
+│   │   │   │   │   │   ├── PreferencesPane.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   └── index.js
+│   │   │   │   └── Boards
+│   │   │   │       ├── Boards.jsx
+│   │   │   │       ├── Boards.module.scss
+│   │   │   │       ├── Item.jsx
+│   │   │   │       ├── Item.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── cards
+│   │   │   │   ├── AddCard
+│   │   │   │   │   ├── AddCard.jsx
+│   │   │   │   │   ├── AddCard.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── ArchiveCardsStep.jsx
+│   │   │   │   ├── Card
+│   │   │   │   │   ├── Card.jsx
+│   │   │   │   │   ├── Card.module.scss
+│   │   │   │   │   ├── EditName.jsx
+│   │   │   │   │   ├── EditName.module.scss
+│   │   │   │   │   ├── InlineContent.jsx
+│   │   │   │   │   ├── InlineContent.module.scss
+│   │   │   │   │   ├── ProjectContent.jsx
+│   │   │   │   │   ├── ProjectContent.module.scss
+│   │   │   │   │   ├── StoryContent.jsx
+│   │   │   │   │   ├── StoryContent.module.scss
+│   │   │   │   │   ├── TaskList
+│   │   │   │   │   │   ├── Task.jsx
+│   │   │   │   │   │   ├── Task.module.scss
+│   │   │   │   │   │   ├── TaskList.jsx
+│   │   │   │   │   │   ├── TaskList.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── CardActionsStep
+│   │   │   │   │   ├── CardActionsStep.jsx
+│   │   │   │   │   ├── CardActionsStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── CardModal
+│   │   │   │   │   ├── AddAttachmentZone
+│   │   │   │   │   │   ├── AddAttachmentZone.jsx
+│   │   │   │   │   │   ├── AddAttachmentZone.module.scss
+│   │   │   │   │   │   ├── AddTextFileModal.jsx
+│   │   │   │   │   │   ├── AddTextFileModal.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── CardModal.jsx
+│   │   │   │   │   ├── CardModal.module.scss
+│   │   │   │   │   ├── Communication.jsx
+│   │   │   │   │   ├── Communication.module.scss
+│   │   │   │   │   ├── CreationDetailsStep.jsx
+│   │   │   │   │   ├── CreationDetailsStep.module.scss
+│   │   │   │   │   ├── CustomFieldGroups
+│   │   │   │   │   │   ├── CustomFieldGroups.jsx
+│   │   │   │   │   │   ├── CustomFieldGroups.module.scss
+│   │   │   │   │   │   ├── DraggableItem.jsx
+│   │   │   │   │   │   ├── DraggableItem.module.scss
+│   │   │   │   │   │   ├── Item.jsx
+│   │   │   │   │   │   ├── Item.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── MoreActionsStep.jsx
+│   │   │   │   │   ├── MoreActionsStep.module.scss
+│   │   │   │   │   ├── NameField.jsx
+│   │   │   │   │   ├── NameField.module.scss
+│   │   │   │   │   ├── ProjectContent.jsx
+│   │   │   │   │   ├── ProjectContent.module.scss
+│   │   │   │   │   ├── StoryContent.jsx
+│   │   │   │   │   ├── StoryContent.module.scss
+│   │   │   │   │   ├── TaskLists
+│   │   │   │   │   │   ├── EditStep.jsx
+│   │   │   │   │   │   ├── EditStep.module.scss
+│   │   │   │   │   │   ├── Item.jsx
+│   │   │   │   │   │   ├── Item.module.scss
+│   │   │   │   │   │   ├── TaskLists.jsx
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── Thumbnail.jsx
+│   │   │   │   │   ├── Thumbnail.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── DraggableCard
+│   │   │   │   │   ├── DraggableCard.jsx
+│   │   │   │   │   ├── DraggableCard.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── DueDateChip
+│   │   │   │   │   ├── DueDateChip.jsx
+│   │   │   │   │   ├── DueDateChip.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── EditDueDateStep
+│   │   │   │   │   ├── EditDueDateStep.jsx
+│   │   │   │   │   ├── EditDueDateStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── EditStopwatchStep
+│   │   │   │   │   ├── EditStopwatchStep.jsx
+│   │   │   │   │   ├── EditStopwatchStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── MoveCardStep
+│   │   │   │   │   ├── MoveCardStep.jsx
+│   │   │   │   │   ├── MoveCardStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── SelectCardType
+│   │   │   │   │   ├── SelectCardType.jsx
+│   │   │   │   │   ├── SelectCardType.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── SelectCardTypeStep.jsx
+│   │   │   │   └── StopwatchChip
+│   │   │   │       ├── StopwatchChip.jsx
+│   │   │   │       ├── StopwatchChip.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── comments
+│   │   │   │   └── Comments
+│   │   │   │       ├── Add.jsx
+│   │   │   │       ├── Add.module.scss
+│   │   │   │       ├── Comments.jsx
+│   │   │   │       ├── Comments.module.scss
+│   │   │   │       ├── Edit.jsx
+│   │   │   │       ├── Edit.module.scss
+│   │   │   │       ├── Item.jsx
+│   │   │   │       ├── Item.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── common
+│   │   │   │   ├── AboutModal
+│   │   │   │   │   ├── AboutModal.jsx
+│   │   │   │   │   ├── AboutModal.module.scss
+│   │   │   │   │   ├── AboutPane.jsx
+│   │   │   │   │   ├── AboutPane.module.scss
+│   │   │   │   │   ├── TermsPane.jsx
+│   │   │   │   │   ├── TermsPane.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── AdministrationModal
+│   │   │   │   │   ├── AdministrationModal.jsx
+│   │   │   │   │   ├── AdministrationModal.module.scss
+│   │   │   │   │   ├── SmtpPane.jsx
+│   │   │   │   │   ├── SmtpPane.module.scss
+│   │   │   │   │   ├── UsersPane
+│   │   │   │   │   │   ├── ActionsStep.jsx
+│   │   │   │   │   │   ├── ActionsStep.module.scss
+│   │   │   │   │   │   ├── AddStep.jsx
+│   │   │   │   │   │   ├── AddStep.module.scss
+│   │   │   │   │   │   ├── ApiKeyStep.jsx
+│   │   │   │   │   │   ├── ApiKeyStep.module.scss
+│   │   │   │   │   │   ├── Item.jsx
+│   │   │   │   │   │   ├── Item.module.scss
+│   │   │   │   │   │   ├── SelectRoleStep.jsx
+│   │   │   │   │   │   ├── SelectRoleStep.module.scss
+│   │   │   │   │   │   ├── UsersPane.jsx
+│   │   │   │   │   │   ├── UsersPane.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── WebhooksPane.jsx
+│   │   │   │   │   ├── WebhooksPane.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── ConfirmationStep
+│   │   │   │   │   ├── ConfirmationStep.jsx
+│   │   │   │   │   ├── ConfirmationStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Core
+│   │   │   │   │   ├── Core.jsx
+│   │   │   │   │   ├── Message.jsx
+│   │   │   │   │   ├── Message.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── EditMarkdown
+│   │   │   │   │   ├── EditMarkdown.jsx
+│   │   │   │   │   ├── EditMarkdown.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── ExpandableMarkdown
+│   │   │   │   │   ├── ExpandableMarkdown.jsx
+│   │   │   │   │   ├── ExpandableMarkdown.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Favicon
+│   │   │   │   │   ├── Favicon.jsx
+│   │   │   │   │   ├── Favicon.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Favorites
+│   │   │   │   │   ├── Favorites.jsx
+│   │   │   │   │   ├── Favorites.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Fixed
+│   │   │   │   │   ├── Fixed.jsx
+│   │   │   │   │   ├── Fixed.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── GhostError
+│   │   │   │   │   ├── GhostError.jsx
+│   │   │   │   │   ├── GhostError.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Header
+│   │   │   │   │   ├── Header.jsx
+│   │   │   │   │   ├── Header.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Home
+│   │   │   │   │   ├── GridProjectsView.jsx
+│   │   │   │   │   ├── GroupedProjectsView.jsx
+│   │   │   │   │   ├── Home.jsx
+│   │   │   │   │   ├── Home.module.scss
+│   │   │   │   │   ├── Projects.jsx
+│   │   │   │   │   ├── Projects.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── HomeActions
+│   │   │   │   │   ├── Filters.jsx
+│   │   │   │   │   ├── Filters.module.scss
+│   │   │   │   │   ├── HomeActions.jsx
+│   │   │   │   │   ├── HomeActions.module.scss
+│   │   │   │   │   ├── RightSide
+│   │   │   │   │   │   ├── RightSide.jsx
+│   │   │   │   │   │   ├── RightSide.module.scss
+│   │   │   │   │   │   ├── SelectOrderStep.jsx
+│   │   │   │   │   │   ├── SelectOrderStep.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Linkify
+│   │   │   │   │   ├── Link.jsx
+│   │   │   │   │   ├── Linkify.jsx
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Login
+│   │   │   │   │   ├── Content.jsx
+│   │   │   │   │   ├── Content.module.scss
+│   │   │   │   │   ├── Login.jsx
+│   │   │   │   │   ├── TermsModal.jsx
+│   │   │   │   │   ├── TermsModal.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Markdown.jsx
+│   │   │   │   ├── MarkdownEditor
+│   │   │   │   │   ├── MarkdownEditor.jsx
+│   │   │   │   │   ├── MarkdownEditor.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Root.jsx
+│   │   │   │   ├── Static
+│   │   │   │   │   ├── Static.jsx
+│   │   │   │   │   ├── Static.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── TimeAgo
+│   │   │   │   │   ├── ExpirableTime.jsx
+│   │   │   │   │   ├── ExpirableTime.module.scss
+│   │   │   │   │   ├── TimeAgo.jsx
+│   │   │   │   │   └── index.js
+│   │   │   │   └── Toaster
+│   │   │   │       ├── EmptyTrashToast.jsx
+│   │   │   │       ├── EmptyTrashToast.module.scss
+│   │   │   │       ├── FileIsTooBigToast.jsx
+│   │   │   │       ├── NotEnoughStorageToast.jsx
+│   │   │   │       ├── SourceCardNotCopyableToast.jsx
+│   │   │   │       ├── SourceCardNotMovableToast.jsx
+│   │   │   │       ├── Toaster.jsx
+│   │   │   │       └── index.js
+│   │   │   ├── custom-field-groups
+│   │   │   │   ├── AddCustomFieldGroupStep
+│   │   │   │   │   ├── AddCustomFieldGroupStep.jsx
+│   │   │   │   │   ├── AddCustomFieldGroupStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── CustomFieldGroup
+│   │   │   │   │   ├── CustomFieldGroup.jsx
+│   │   │   │   │   ├── CustomFieldGroup.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── CustomFieldGroupEditor
+│   │   │   │   │   ├── CustomFieldGroupEditor.jsx
+│   │   │   │   │   ├── CustomFieldGroupEditor.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── CustomFieldGroupStep
+│   │   │   │   │   ├── CustomField.jsx
+│   │   │   │   │   ├── CustomField.module.scss
+│   │   │   │   │   ├── CustomFieldAddStep.jsx
+│   │   │   │   │   ├── CustomFieldAddStep.module.scss
+│   │   │   │   │   ├── CustomFieldEditStep.jsx
+│   │   │   │   │   ├── CustomFieldEditStep.module.scss
+│   │   │   │   │   ├── CustomFieldEditor.jsx
+│   │   │   │   │   ├── CustomFieldEditor.module.scss
+│   │   │   │   │   ├── CustomFieldGroupStep.jsx
+│   │   │   │   │   ├── UnbasedContent.jsx
+│   │   │   │   │   ├── UnbasedContent.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── CustomFieldGroupsStep
+│   │   │   │   │   ├── CustomFieldGroupsStep.jsx
+│   │   │   │   │   ├── CustomFieldGroupsStep.module.scss
+│   │   │   │   │   ├── Item.jsx
+│   │   │   │   │   ├── Item.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── EditCustomFieldGroupStep
+│   │   │   │       ├── EditCustomFieldGroupStep.jsx
+│   │   │   │       ├── EditCustomFieldGroupStep.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── custom-field-values
+│   │   │   │   └── CustomFieldValueChip
+│   │   │   │       ├── CustomFieldValueChip.jsx
+│   │   │   │       ├── CustomFieldValueChip.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── custom-fields
+│   │   │   │   └── CustomField
+│   │   │   │       ├── CustomField.jsx
+│   │   │   │       ├── CustomField.module.scss
+│   │   │   │       ├── ValueField.jsx
+│   │   │   │       ├── ValueField.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── labels
+│   │   │   │   ├── LabelChip
+│   │   │   │   │   ├── LabelChip.jsx
+│   │   │   │   │   ├── LabelChip.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── LabelsStep
+│   │   │   │       ├── AddStep.jsx
+│   │   │   │       ├── EditStep.jsx
+│   │   │   │       ├── EditStep.module.scss
+│   │   │   │       ├── Editor.jsx
+│   │   │   │       ├── Editor.module.scss
+│   │   │   │       ├── Item.jsx
+│   │   │   │       ├── Item.module.scss
+│   │   │   │       ├── LabelsStep.jsx
+│   │   │   │       ├── LabelsStep.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── lists
+│   │   │   │   ├── List
+│   │   │   │   │   ├── ActionsStep.jsx
+│   │   │   │   │   ├── ActionsStep.module.scss
+│   │   │   │   │   ├── EditColorStep.jsx
+│   │   │   │   │   ├── EditColorStep.module.scss
+│   │   │   │   │   ├── EditName.jsx
+│   │   │   │   │   ├── EditName.module.scss
+│   │   │   │   │   ├── List.jsx
+│   │   │   │   │   ├── List.module.scss
+│   │   │   │   │   ├── MoveStep.jsx
+│   │   │   │   │   ├── MoveStep.module.scss
+│   │   │   │   │   ├── SortStep.jsx
+│   │   │   │   │   ├── SortStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── ListsStep
+│   │   │   │   │   ├── Item.jsx
+│   │   │   │   │   ├── Item.module.scss
+│   │   │   │   │   ├── ListsStep.jsx
+│   │   │   │   │   ├── ListsStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── SelectListTypeStep
+│   │   │   │       ├── SelectListTypeStep.jsx
+│   │   │   │       ├── SelectListTypeStep.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── notification-services
+│   │   │   │   └── NotificationServices
+│   │   │   │       ├── Item.jsx
+│   │   │   │       ├── Item.module.scss
+│   │   │   │       ├── NotificationServices.jsx
+│   │   │   │       ├── NotificationServices.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── notifications
+│   │   │   │   └── NotificationsStep
+│   │   │   │       ├── Item.jsx
+│   │   │   │       ├── Item.module.scss
+│   │   │   │       ├── NotificationsStep.jsx
+│   │   │   │       ├── NotificationsStep.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── project-managers
+│   │   │   │   └── ProjectManagers
+│   │   │   │       ├── ActionsStep.jsx
+│   │   │   │       ├── ActionsStep.module.scss
+│   │   │   │       ├── AddStep
+│   │   │   │       │   ├── AddStep.jsx
+│   │   │   │       │   ├── AddStep.module.scss
+│   │   │   │       │   ├── User.jsx
+│   │   │   │       │   ├── User.module.scss
+│   │   │   │       │   └── index.js
+│   │   │   │       ├── ProjectManagers.jsx
+│   │   │   │       ├── ProjectManagers.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── projects
+│   │   │   │   ├── AddProjectModal
+│   │   │   │   │   ├── AddProjectModal.jsx
+│   │   │   │   │   ├── AddProjectModal.module.scss
+│   │   │   │   │   ├── SelectTypeStep.jsx
+│   │   │   │   │   ├── SelectTypeStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── Project
+│   │   │   │   │   ├── Project.jsx
+│   │   │   │   │   ├── Project.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── ProjectBackground
+│   │   │   │   │   ├── ProjectBackground.jsx
+│   │   │   │   │   ├── ProjectBackground.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── ProjectCard
+│   │   │   │   │   ├── ProjectCard.jsx
+│   │   │   │   │   ├── ProjectCard.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── ProjectSettingsModal
+│   │   │   │       ├── BackgroundPane
+│   │   │   │       │   ├── AddImageZone.jsx
+│   │   │   │       │   ├── AddImageZone.module.scss
+│   │   │   │       │   ├── BackgroundPane.jsx
+│   │   │   │       │   ├── BackgroundPane.module.scss
+│   │   │   │       │   ├── Gradients
+│   │   │   │       │   │   ├── Gradients.jsx
+│   │   │   │       │   │   ├── Gradients.module.scss
+│   │   │   │       │   │   ├── Item.jsx
+│   │   │   │       │   │   ├── Item.module.scss
+│   │   │   │       │   │   └── index.js
+│   │   │   │       │   ├── Image.jsx
+│   │   │   │       │   ├── Image.module.scss
+│   │   │   │       │   ├── Images
+│   │   │   │       │   │   ├── Images.jsx
+│   │   │   │       │   │   ├── Images.module.scss
+│   │   │   │       │   │   ├── Item.jsx
+│   │   │   │       │   │   ├── Item.module.scss
+│   │   │   │       │   │   └── index.js
+│   │   │   │       │   └── index.js
+│   │   │   │       ├── BaseCustomFieldGroupsPane.jsx
+│   │   │   │       ├── BaseCustomFieldGroupsPane.module.scss
+│   │   │   │       ├── GeneralPane
+│   │   │   │       │   ├── EditInformation.jsx
+│   │   │   │       │   ├── EditInformation.module.scss
+│   │   │   │       │   ├── GeneralPane.jsx
+│   │   │   │       │   ├── GeneralPane.module.scss
+│   │   │   │       │   └── index.js
+│   │   │   │       ├── ManagersPane.jsx
+│   │   │   │       ├── ManagersPane.module.scss
+│   │   │   │       ├── ProjectSettingsModal.jsx
+│   │   │   │       ├── ProjectSettingsModal.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── task-lists
+│   │   │   │   ├── AddTaskListStep.jsx
+│   │   │   │   ├── TaskList
+│   │   │   │   │   ├── AddTask.jsx
+│   │   │   │   │   ├── AddTask.module.scss
+│   │   │   │   │   ├── Task
+│   │   │   │   │   │   ├── ActionsStep.jsx
+│   │   │   │   │   │   ├── ActionsStep.module.scss
+│   │   │   │   │   │   ├── EditName.jsx
+│   │   │   │   │   │   ├── EditName.module.scss
+│   │   │   │   │   │   ├── SelectAssigneeStep.jsx
+│   │   │   │   │   │   ├── Task.jsx
+│   │   │   │   │   │   ├── Task.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── TaskList.jsx
+│   │   │   │   │   ├── TaskList.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── TaskListEditor
+│   │   │   │       ├── TaskListEditor.jsx
+│   │   │   │       ├── TaskListEditor.module.scss
+│   │   │   │       └── index.js
+│   │   │   ├── users
+│   │   │   │   ├── EditUserEmailStep
+│   │   │   │   │   ├── EditUserEmailStep.jsx
+│   │   │   │   │   ├── EditUserEmailStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── EditUserInformation
+│   │   │   │   │   ├── EditUserInformation.jsx
+│   │   │   │   │   ├── EditUserInformation.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── EditUserInformationStep.jsx
+│   │   │   │   ├── EditUserPasswordStep
+│   │   │   │   │   ├── EditUserPasswordStep.jsx
+│   │   │   │   │   ├── EditUserPasswordStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── EditUserUsernameStep
+│   │   │   │   │   ├── EditUserUsernameStep.jsx
+│   │   │   │   │   ├── EditUserUsernameStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── UserActionsStep
+│   │   │   │   │   ├── UserActionsStep.jsx
+│   │   │   │   │   ├── UserActionsStep.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── UserAvatar
+│   │   │   │   │   ├── UserAvatar.jsx
+│   │   │   │   │   ├── UserAvatar.module.scss
+│   │   │   │   │   └── index.js
+│   │   │   │   └── UserSettingsModal
+│   │   │   │       ├── AccountPane
+│   │   │   │       │   ├── AccountPane.jsx
+│   │   │   │       │   ├── AccountPane.module.scss
+│   │   │   │       │   ├── EditAvatarStep.jsx
+│   │   │   │       │   ├── EditAvatarStep.module.scss
+│   │   │   │       │   └── index.js
+│   │   │   │       ├── NotificationsPane.jsx
+│   │   │   │       ├── NotificationsPane.module.scss
+│   │   │   │       ├── PreferencesPane.jsx
+│   │   │   │       ├── PreferencesPane.module.scss
+│   │   │   │       ├── UserSettingsModal.jsx
+│   │   │   │       └── index.js
+│   │   │   └── webhooks
+│   │   │       └── Webhooks
+│   │   │           ├── Editor.jsx
+│   │   │           ├── Editor.module.scss
+│   │   │           ├── Item.jsx
+│   │   │           ├── Item.module.scss
+│   │   │           ├── Webhooks.jsx
+│   │   │           └── index.js
+│   │   ├── configs
+│   │   │   └── markdown-plugins
+│   │   │       ├── index.js
+│   │   │       ├── link.js
+│   │   │       └── mention.js
+│   │   ├── constants
+│   │   │   ├── AccessTokenSteps.js
+│   │   │   ├── ActionTypes.js
+│   │   │   ├── BackgroundGradients.js
+│   │   │   ├── ClipboardTypes.js
+│   │   │   ├── Config.js
+│   │   │   ├── DroppableTypes.js
+│   │   │   ├── Encodings.js
+│   │   │   ├── EntryActionTypes.js
+│   │   │   ├── Enums.js
+│   │   │   ├── ErrorCodes.js
+│   │   │   ├── Icons.js
+│   │   │   ├── LabelColors.js
+│   │   │   ├── ListColors.js
+│   │   │   ├── ListTypeStateByType.js
+│   │   │   ├── ModalTypes.js
+│   │   │   ├── Paths.js
+│   │   │   ├── StaticUsers.js
+│   │   │   ├── TermsLanguages.js
+│   │   │   ├── ToastTypes.js
+│   │   │   └── WebhookEvents.js
+│   │   ├── contexts
+│   │   │   ├── BoardShortcutsContext.js
+│   │   │   ├── ClosableContext.js
+│   │   │   └── index.js
+│   │   ├── entry-actions
+│   │   │   ├── activities.js
+│   │   │   ├── attachments.js
+│   │   │   ├── background-images.js
+│   │   │   ├── base-custom-field-groups.js
+│   │   │   ├── board-memberships.js
+│   │   │   ├── boards.js
+│   │   │   ├── bootstrap.js
+│   │   │   ├── cards.js
+│   │   │   ├── comments.js
+│   │   │   ├── config.js
+│   │   │   ├── core.js
+│   │   │   ├── custom-field-groups.js
+│   │   │   ├── custom-field-values.js
+│   │   │   ├── custom-fields.js
+│   │   │   ├── index.js
+│   │   │   ├── labels.js
+│   │   │   ├── lists.js
+│   │   │   ├── login.js
+│   │   │   ├── modals.js
+│   │   │   ├── notification-services.js
+│   │   │   ├── notifications.js
+│   │   │   ├── project-managers.js
+│   │   │   ├── projects.js
+│   │   │   ├── socket.js
+│   │   │   ├── task-lists.js
+│   │   │   ├── tasks.js
+│   │   │   ├── users.js
+│   │   │   └── webhooks.js
+│   │   ├── history.js
+│   │   ├── hooks
+│   │   │   ├── index.js
+│   │   │   ├── use-closable-modal.jsx
+│   │   │   ├── use-closable.js
+│   │   │   ├── use-escape-interceptor.js
+│   │   │   ├── use-field.js
+│   │   │   ├── use-form.js
+│   │   │   ├── use-modal.js
+│   │   │   ├── use-nested-ref.js
+│   │   │   ├── use-popup-in-closable-context.js
+│   │   │   └── use-steps.js
+│   │   ├── i18n.js
+│   │   ├── index.js
+│   │   ├── lib
+│   │   │   ├── custom-ui
+│   │   │   │   ├── assets
+│   │   │   │   │   ├── fonts
+│   │   │   │   │   │   ├── Nunitoga-Bold.woff2
+│   │   │   │   │   │   ├── Nunitoga-BoldItalic.woff2
+│   │   │   │   │   │   ├── Nunitoga-Light.woff2
+│   │   │   │   │   │   ├── Nunitoga-LightItalic.woff2
+│   │   │   │   │   │   ├── Nunitoga-Medium.woff2
+│   │   │   │   │   │   ├── Nunitoga-MediumItalic.woff2
+│   │   │   │   │   │   ├── brand-icons.eot
+│   │   │   │   │   │   ├── brand-icons.svg
+│   │   │   │   │   │   ├── brand-icons.ttf
+│   │   │   │   │   │   ├── brand-icons.woff
+│   │   │   │   │   │   ├── brand-icons.woff2
+│   │   │   │   │   │   ├── icons.eot
+│   │   │   │   │   │   ├── icons.otf
+│   │   │   │   │   │   ├── icons.svg
+│   │   │   │   │   │   ├── icons.ttf
+│   │   │   │   │   │   ├── icons.woff
+│   │   │   │   │   │   ├── icons.woff2
+│   │   │   │   │   │   ├── outline-icons.eot
+│   │   │   │   │   │   ├── outline-icons.svg
+│   │   │   │   │   │   ├── outline-icons.ttf
+│   │   │   │   │   │   ├── outline-icons.woff
+│   │   │   │   │   │   └── outline-icons.woff2
+│   │   │   │   │   └── images
+│   │   │   │   │       └── flags.png
+│   │   │   │   ├── components
+│   │   │   │   │   ├── FilePicker
+│   │   │   │   │   │   ├── FilePicker.jsx
+│   │   │   │   │   │   ├── FilePicker.module.css
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── Input
+│   │   │   │   │   │   ├── Input.jsx
+│   │   │   │   │   │   ├── InputMask.jsx
+│   │   │   │   │   │   ├── InputPassword.jsx
+│   │   │   │   │   │   ├── InputPassword.module.css
+│   │   │   │   │   │   ├── MaskedInput.jsx
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   ├── Masonry
+│   │   │   │   │   │   ├── Masonry.jsx
+│   │   │   │   │   │   ├── Masonry.module.scss
+│   │   │   │   │   │   └── index.js
+│   │   │   │   │   └── Popup
+│   │   │   │   │       ├── Popup.jsx
+│   │   │   │   │       ├── PopupHeader.jsx
+│   │   │   │   │       ├── PopupHeader.module.css
+│   │   │   │   │       └── index.js
+│   │   │   │   ├── index.js
+│   │   │   │   └── styles.css
+│   │   │   ├── hooks
+│   │   │   │   ├── index.js
+│   │   │   │   ├── use-click-away-listener.js
+│   │   │   │   ├── use-did-update.js
+│   │   │   │   ├── use-event-callback.js
+│   │   │   │   ├── use-force-update.js
+│   │   │   │   ├── use-previous.js
+│   │   │   │   ├── use-toggle.js
+│   │   │   │   ├── use-transitioning.js
+│   │   │   │   └── use-window-width.js
+│   │   │   ├── popup
+│   │   │   │   ├── Popup.module.css
+│   │   │   │   ├── close-popup.js
+│   │   │   │   ├── index.js
+│   │   │   │   └── use-popup.jsx
+│   │   │   ├── redux-router
+│   │   │   │   ├── ReduxRouter.jsx
+│   │   │   │   ├── actions.js
+│   │   │   │   ├── create-router-middleware.js
+│   │   │   │   ├── create-router-reducer.js
+│   │   │   │   └── index.js
+│   │   │   └── syntax-highlighter
+│   │   │       ├── index.js
+│   │   │       ├── language-definitions
+│   │   │       │   ├── chapel.js
+│   │   │       │   ├── dafny.js
+│   │   │       │   ├── gn.js
+│   │   │       │   ├── godot.js
+│   │   │       │   ├── hlsl.js
+│   │   │       │   └── terraform.js
+│   │   │       ├── languages-map.json
+│   │   │       ├── languages.js
+│   │   │       └── syntax-highlighter.js
+│   │   ├── locales
+│   │   │   ├── ar-YE
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── bg-BG
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── ca-ES
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── cs-CZ
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── da-DK
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── de-DE
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── el-GR
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── en-GB
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── en-US
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── es-ES
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── et-EE
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── fa-IR
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── fi-FI
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── fr-FR
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── hu-HU
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── id-ID
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── index.js
+│   │   │   ├── it-IT
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── ja-JP
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── ko-KR
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── nl-NL
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── pl-PL
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── pt-BR
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── pt-PT
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── ro-RO
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── ru-RU
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── sk-SK
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── sr-Cyrl-RS
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── sr-Latn-RS
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── sv-SE
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── tr-TR
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── uk-UA
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── uz-UZ
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── vi-VN
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   ├── zh-CN
+│   │   │   │   ├── core.js
+│   │   │   │   ├── index.js
+│   │   │   │   ├── login.js
+│   │   │   │   └── markdown-editor.json
+│   │   │   └── zh-TW
+│   │   │       ├── core.js
+│   │   │       ├── index.js
+│   │   │       ├── login.js
+│   │   │       └── markdown-editor.json
+│   │   ├── models
+│   │   │   ├── Activity.js
+│   │   │   ├── Attachment.js
+│   │   │   ├── BackgroundImage.js
+│   │   │   ├── BaseCustomFieldGroup.js
+│   │   │   ├── BaseModel.js
+│   │   │   ├── Board.js
+│   │   │   ├── BoardMembership.js
+│   │   │   ├── Card.js
+│   │   │   ├── Comment.js
+│   │   │   ├── CustomField.js
+│   │   │   ├── CustomFieldGroup.js
+│   │   │   ├── CustomFieldValue.js
+│   │   │   ├── Label.js
+│   │   │   ├── List.js
+│   │   │   ├── Notification.js
+│   │   │   ├── NotificationService.js
+│   │   │   ├── Project.js
+│   │   │   ├── ProjectManager.js
+│   │   │   ├── Task.js
+│   │   │   ├── TaskList.js
+│   │   │   ├── User.js
+│   │   │   ├── Webhook.js
+│   │   │   └── index.js
+│   │   ├── orm.js
+│   │   ├── reducers
+│   │   │   ├── auth.js
+│   │   │   ├── common.js
+│   │   │   ├── core.js
+│   │   │   ├── index.js
+│   │   │   ├── orm.js
+│   │   │   ├── router.js
+│   │   │   ├── socket.js
+│   │   │   └── ui
+│   │   │       ├── authenticate-form.js
+│   │   │       ├── index.js
+│   │   │       ├── project-create-form.js
+│   │   │       ├── smtp-test-state.js
+│   │   │       └── user-create-form.js
+│   │   ├── sagas
+│   │   │   ├── core
+│   │   │   │   ├── index.js
+│   │   │   │   ├── request.js
+│   │   │   │   ├── requests
+│   │   │   │   │   ├── boards.js
+│   │   │   │   │   ├── core.js
+│   │   │   │   │   └── index.js
+│   │   │   │   ├── services
+│   │   │   │   │   ├── activities.js
+│   │   │   │   │   ├── attachments.js
+│   │   │   │   │   ├── background-images.js
+│   │   │   │   │   ├── base-custom-field-groups.js
+│   │   │   │   │   ├── board-memberships.js
+│   │   │   │   │   ├── boards.js
+│   │   │   │   │   ├── bootstrap.js
+│   │   │   │   │   ├── cards.js
+│   │   │   │   │   ├── comments.js
+│   │   │   │   │   ├── config.js
+│   │   │   │   │   ├── core.js
+│   │   │   │   │   ├── custom-field-groups.js
+│   │   │   │   │   ├── custom-field-values.js
+│   │   │   │   │   ├── custom-fields.js
+│   │   │   │   │   ├── index.js
+│   │   │   │   │   ├── labels.js
+│   │   │   │   │   ├── lists.js
+│   │   │   │   │   ├── modals.js
+│   │   │   │   │   ├── notification-services.js
+│   │   │   │   │   ├── notifications.js
+│   │   │   │   │   ├── project-managers.js
+│   │   │   │   │   ├── projects.js
+│   │   │   │   │   ├── router.js
+│   │   │   │   │   ├── socket.js
+│   │   │   │   │   ├── task-lists.js
+│   │   │   │   │   ├── tasks.js
+│   │   │   │   │   ├── users.js
+│   │   │   │   │   └── webhooks.js
+│   │   │   │   └── watchers
+│   │   │   │       ├── activities.js
+│   │   │   │       ├── attachments.js
+│   │   │   │       ├── background-images.js
+│   │   │   │       ├── base-custom-field-groups.js
+│   │   │   │       ├── board-memberships.js
+│   │   │   │       ├── boards.js
+│   │   │   │       ├── bootstrap.js
+│   │   │   │       ├── cards.js
+│   │   │   │       ├── comments.js
+│   │   │   │       ├── config.js
+│   │   │   │       ├── core.js
+│   │   │   │       ├── custom-field-groups.js
+│   │   │   │       ├── custom-field-values.js
+│   │   │   │       ├── custom-fields.js
+│   │   │   │       ├── index.js
+│   │   │   │       ├── labels.js
+│   │   │   │       ├── lists.js
+│   │   │   │       ├── modals.js
+│   │   │   │       ├── notification-services.js
+│   │   │   │       ├── notifications.js
+│   │   │   │       ├── project-managers.js
+│   │   │   │       ├── projects.js
+│   │   │   │       ├── router.js
+│   │   │   │       ├── socket.js
+│   │   │   │       ├── task-lists.js
+│   │   │   │       ├── tasks.js
+│   │   │   │       ├── users.js
+│   │   │   │       └── webhooks.js
+│   │   │   ├── index.js
+│   │   │   ├── login
+│   │   │   │   ├── index.js
+│   │   │   │   ├── services
+│   │   │   │   │   ├── index.js
+│   │   │   │   │   ├── login.js
+│   │   │   │   │   └── router.js
+│   │   │   │   └── watchers
+│   │   │   │       ├── index.js
+│   │   │   │       ├── login.js
+│   │   │   │       └── router.js
+│   │   │   └── run-watchers.js
+│   │   ├── selectors
+│   │   │   ├── activities.js
+│   │   │   ├── attachments.js
+│   │   │   ├── background-images.js
+│   │   │   ├── base-custom-field-groups.js
+│   │   │   ├── board-memberships.js
+│   │   │   ├── boards.js
+│   │   │   ├── cards.js
+│   │   │   ├── comments.js
+│   │   │   ├── common.js
+│   │   │   ├── core.js
+│   │   │   ├── custom-field-groups.js
+│   │   │   ├── custom-field-values.js
+│   │   │   ├── custom-fields.js
+│   │   │   ├── index.js
+│   │   │   ├── labels.js
+│   │   │   ├── lists.js
+│   │   │   ├── modals.js
+│   │   │   ├── notification-services.js
+│   │   │   ├── notifications.js
+│   │   │   ├── positioning.js
+│   │   │   ├── project-managers.js
+│   │   │   ├── projects.js
+│   │   │   ├── router.js
+│   │   │   ├── task-lists.js
+│   │   │   ├── tasks.js
+│   │   │   ├── users.js
+│   │   │   └── webhooks.js
+│   │   ├── store.js
+│   │   ├── styles.module.scss
+│   │   ├── utils
+│   │   │   ├── access-token-storage.js
+│   │   │   ├── build-search-parts.js
+│   │   │   ├── element-helpers.js
+│   │   │   ├── event-helpers.js
+│   │   │   ├── get-date-format.js
+│   │   │   ├── get-filename-and-extension.js
+│   │   │   ├── local-id.js
+│   │   │   ├── local-id.test.js
+│   │   │   ├── markdown-to-text.js
+│   │   │   ├── match-paths.js
+│   │   │   ├── mentions.js
+│   │   │   ├── merge-records.js
+│   │   │   ├── parse-dnd-id.js
+│   │   │   ├── parse-time.js
+│   │   │   ├── record-helpers.js
+│   │   │   ├── stopwatch.js
+│   │   │   └── validator.js
+│   │   └── version.js
+│   ├── tests
+│   │   ├── acceptance
+│   │   │   ├── Config.js
+│   │   │   ├── cucumber.conf.js
+│   │   │   ├── features
+│   │   │   │   └── login.feature
+│   │   │   ├── pages
+│   │   │   │   ├── HomePage.js
+│   │   │   │   └── LoginPage.js
+│   │   │   └── steps
+│   │   │       └── login.step.js
+│   │   └── setup-symlinks.sh
+│   ├── version-template.ejs
+│   └── vite.config.js
+├── docker-backup.sh
+├── docker-compose-dev.yml
+├── docker-compose.yml
+├── docker-restore.sh
+├── package-lock.json
+├── package.json
+└── server
+    ├── api
+    │   ├── controllers
+    │   │   ├── _internal
+    │   │   │   └── update-config.js
+    │   │   ├── access-tokens
+    │   │   │   ├── accept-terms.js
+    │   │   │   ├── create.js
+    │   │   │   ├── debug-oidc.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── exchange-with-oidc.js
+    │   │   │   └── revoke-pending-token.js
+    │   │   ├── actions
+    │   │   │   ├── index-in-board.js
+    │   │   │   └── index-in-card.js
+    │   │   ├── attachments
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   └── update.js
+    │   │   ├── background-images
+    │   │   │   ├── create.js
+    │   │   │   └── delete.js
+    │   │   ├── base-custom-field-groups
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   └── update.js
+    │   │   ├── board-memberships
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   └── update.js
+    │   │   ├── boards
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── show.js
+    │   │   │   └── update.js
+    │   │   ├── bootstrap
+    │   │   │   └── show.js
+    │   │   ├── card-labels
+    │   │   │   ├── create.js
+    │   │   │   └── delete.js
+    │   │   ├── card-memberships
+    │   │   │   ├── create.js
+    │   │   │   └── delete.js
+    │   │   ├── cards
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── duplicate.js
+    │   │   │   ├── index.js
+    │   │   │   ├── read-notifications.js
+    │   │   │   ├── show.js
+    │   │   │   └── update.js
+    │   │   ├── comments
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── index.js
+    │   │   │   └── update.js
+    │   │   ├── config
+    │   │   │   ├── show.js
+    │   │   │   ├── test-smtp.js
+    │   │   │   └── update.js
+    │   │   ├── custom-field-groups
+    │   │   │   ├── create-in-board.js
+    │   │   │   ├── create-in-card.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── show.js
+    │   │   │   └── update.js
+    │   │   ├── custom-field-values
+    │   │   │   ├── create-or-update.js
+    │   │   │   └── delete.js
+    │   │   ├── custom-fields
+    │   │   │   ├── create-in-base-custom-field-group.js
+    │   │   │   ├── create-in-custom-field-group.js
+    │   │   │   ├── delete.js
+    │   │   │   └── update.js
+    │   │   ├── file-attachments
+    │   │   │   ├── download-thumbnail.js
+    │   │   │   └── download.js
+    │   │   ├── labels
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   └── update.js
+    │   │   ├── lists
+    │   │   │   ├── clear.js
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── move-cards.js
+    │   │   │   ├── show.js
+    │   │   │   ├── sort.js
+    │   │   │   └── update.js
+    │   │   ├── notification-services
+    │   │   │   ├── create-in-board.js
+    │   │   │   ├── create-in-user.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── test.js
+    │   │   │   └── update.js
+    │   │   ├── notifications
+    │   │   │   ├── index.js
+    │   │   │   ├── read-all.js
+    │   │   │   ├── show.js
+    │   │   │   └── update.js
+    │   │   ├── project-managers
+    │   │   │   ├── create.js
+    │   │   │   └── delete.js
+    │   │   ├── projects
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── index.js
+    │   │   │   ├── show.js
+    │   │   │   └── update.js
+    │   │   ├── task-lists
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── show.js
+    │   │   │   └── update.js
+    │   │   ├── tasks
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   └── update.js
+    │   │   ├── terms
+    │   │   │   └── show.js
+    │   │   ├── users
+    │   │   │   ├── create-api-key.js
+    │   │   │   ├── create.js
+    │   │   │   ├── delete.js
+    │   │   │   ├── index.js
+    │   │   │   ├── show.js
+    │   │   │   ├── update-avatar.js
+    │   │   │   ├── update-email.js
+    │   │   │   ├── update-password.js
+    │   │   │   ├── update-username.js
+    │   │   │   └── update.js
+    │   │   └── webhooks
+    │   │       ├── create.js
+    │   │       ├── delete.js
+    │   │       ├── index.js
+    │   │       └── update.js
+    │   ├── helpers
+    │   │   ├── access-tokens
+    │   │   │   └── handle-steps.js
+    │   │   ├── actions
+    │   │   │   └── create-one.js
+    │   │   ├── attachments
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   ├── present-many.js
+    │   │   │   ├── present-one.js
+    │   │   │   ├── process-link.js
+    │   │   │   ├── process-uploaded-file.js
+    │   │   │   └── update-one.js
+    │   │   ├── background-images
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   ├── present-many.js
+    │   │   │   ├── present-one.js
+    │   │   │   └── process-uploaded-file.js
+    │   │   ├── base-custom-field-groups
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   └── update-one.js
+    │   │   ├── board-memberships
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   └── update-one.js
+    │   │   ├── boards
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-card-ids.js
+    │   │   │   ├── get-kanban-lists-by-id.js
+    │   │   │   ├── get-member-user-ids.js
+    │   │   │   ├── get-notification-services-total.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   ├── get-subscription-user-ids.js
+    │   │   │   ├── import-from-trello.js
+    │   │   │   ├── process-uploaded-trello-import-file.js
+    │   │   │   └── update-one.js
+    │   │   ├── bootstrap
+    │   │   │   └── present-one.js
+    │   │   ├── card-labels
+    │   │   │   ├── create-one.js
+    │   │   │   └── delete-one.js
+    │   │   ├── card-memberships
+    │   │   │   ├── create-one.js
+    │   │   │   └── delete-one.js
+    │   │   ├── cards
+    │   │   │   ├── copy-custom-fields.js
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── detach-custom-fields.js
+    │   │   │   ├── duplicate-one.js
+    │   │   │   ├── get-labels.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   ├── get-subscription-user-ids.js
+    │   │   │   ├── read-notifications-for-user.js
+    │   │   │   └── update-one.js
+    │   │   ├── comments
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   └── update-one.js
+    │   │   ├── config
+    │   │   │   ├── present-one.js
+    │   │   │   └── update-main.js
+    │   │   ├── custom-field-groups
+    │   │   │   ├── create-one-in-board.js
+    │   │   │   ├── create-one-in-card.js
+    │   │   │   ├── delete-one-in-board.js
+    │   │   │   ├── delete-one-in-card.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   ├── update-one-in-board.js
+    │   │   │   └── update-one-in-card.js
+    │   │   ├── custom-field-values
+    │   │   │   ├── create-or-update-one.js
+    │   │   │   └── delete-one.js
+    │   │   ├── custom-fields
+    │   │   │   ├── create-one-in-base-custom-field-group.js
+    │   │   │   ├── create-one-in-custom-field-group.js
+    │   │   │   ├── delete-one-in-base-custom-field-group.js
+    │   │   │   ├── delete-one-in-custom-field-group.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   ├── update-one-in-base-custom-field-group.js
+    │   │   │   └── update-one-in-custom-field-group.js
+    │   │   ├── internal-config
+    │   │   │   └── update-main.js
+    │   │   ├── labels
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   └── update-one.js
+    │   │   ├── lists
+    │   │   │   ├── clear-one.js
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   ├── is-archive-or-trash.js
+    │   │   │   ├── is-finite.js
+    │   │   │   ├── is-kanban.js
+    │   │   │   ├── move-cards.js
+    │   │   │   ├── resolve-name.js
+    │   │   │   ├── sort-one.js
+    │   │   │   └── update-one.js
+    │   │   ├── notification-services
+    │   │   │   ├── create-one-in-board.js
+    │   │   │   ├── create-one-in-user.js
+    │   │   │   ├── delete-one-in-board.js
+    │   │   │   ├── delete-one-in-user.js
+    │   │   │   ├── get-path-to-user-by-id.js
+    │   │   │   ├── update-one-in-board.js
+    │   │   │   └── update-one-in-user.js
+    │   │   ├── notifications
+    │   │   │   ├── create-many.js
+    │   │   │   ├── create-one.js
+    │   │   │   ├── read-all-for-user.js
+    │   │   │   └── update-one.js
+    │   │   ├── project-managers
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   └── get-path-to-project-by-id.js
+    │   │   ├── projects
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-board-ids-by-id.js
+    │   │   │   ├── get-board-memberships-total-by-id-and-user-id.js
+    │   │   │   ├── get-boards-total-by-id.js
+    │   │   │   ├── get-lonely-by-ids.js
+    │   │   │   ├── get-manager-user-ids.js
+    │   │   │   ├── get-project-managers-total-by-id.js
+    │   │   │   ├── make-scoper.js
+    │   │   │   └── update-one.js
+    │   │   ├── sessions
+    │   │   │   └── create-one.js
+    │   │   ├── task-lists
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   └── update-one.js
+    │   │   ├── tasks
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── get-path-to-project-by-id.js
+    │   │   │   └── update-one.js
+    │   │   ├── users
+    │   │   │   ├── build-gravatar-url.js
+    │   │   │   ├── create-one.js
+    │   │   │   ├── delete-one.js
+    │   │   │   ├── delete-related.js
+    │   │   │   ├── get-all-active-ids.js
+    │   │   │   ├── get-manager-project-ids.js
+    │   │   │   ├── get-notification-services-total.js
+    │   │   │   ├── get-or-create-one-with-oidc.js
+    │   │   │   ├── get-project-managers-total-by-id.js
+    │   │   │   ├── is-admin-or-project-owner.js
+    │   │   │   ├── is-board-member.js
+    │   │   │   ├── is-board-subscriber.js
+    │   │   │   ├── is-card-subscriber.js
+    │   │   │   ├── is-project-favorite.js
+    │   │   │   ├── is-project-manager.js
+    │   │   │   ├── make-scoper.js
+    │   │   │   ├── present-many.js
+    │   │   │   ├── present-one.js
+    │   │   │   ├── process-uploaded-avatar-file.js
+    │   │   │   └── update-one.js
+    │   │   ├── utils
+    │   │   │   ├── clear-http-only-token-cookie.js
+    │   │   │   ├── create-jwt-token.js
+    │   │   │   ├── download-favicon.js
+    │   │   │   ├── generate-api-key.js
+    │   │   │   ├── generate-ids.js
+    │   │   │   ├── generate-random-string.js
+    │   │   │   ├── get-available-storage.js
+    │   │   │   ├── hash.js
+    │   │   │   ├── insert-to-positionables.js
+    │   │   │   ├── is-preloaded-favicon-exists.js
+    │   │   │   ├── make-smtp-transporter.js
+    │   │   │   ├── make-translator.js
+    │   │   │   ├── map-records.js
+    │   │   │   ├── receive-file.js
+    │   │   │   ├── remove-unreferenced-uploaded-files.js
+    │   │   │   ├── send-email.js
+    │   │   │   ├── send-notifications.js
+    │   │   │   ├── send-webhooks.js
+    │   │   │   ├── set-http-only-token-cookie.js
+    │   │   │   └── verify-jwt-token.js
+    │   │   └── webhooks
+    │   │       ├── create-one.js
+    │   │       ├── delete-one.js
+    │   │       └── update-one.js
+    │   ├── hooks
+    │   │   ├── current-user
+    │   │   │   └── index.js
+    │   │   ├── file-manager
+    │   │   │   ├── LocalFileManager.js
+    │   │   │   ├── S3FileManager.js
+    │   │   │   └── index.js
+    │   │   ├── oidc
+    │   │   │   └── index.js
+    │   │   ├── query-methods
+    │   │   │   ├── helpers.js
+    │   │   │   ├── index.js
+    │   │   │   └── models
+    │   │   │       ├── Action.js
+    │   │   │       ├── Attachment.js
+    │   │   │       ├── BackgroundImage.js
+    │   │   │       ├── BaseCustomFieldGroup.js
+    │   │   │       ├── Board.js
+    │   │   │       ├── BoardMembership.js
+    │   │   │       ├── BoardSubscription.js
+    │   │   │       ├── Card.js
+    │   │   │       ├── CardLabel.js
+    │   │   │       ├── CardMembership.js
+    │   │   │       ├── CardSubscription.js
+    │   │   │       ├── Comment.js
+    │   │   │       ├── Config.js
+    │   │   │       ├── CustomField.js
+    │   │   │       ├── CustomFieldGroup.js
+    │   │   │       ├── CustomFieldValue.js
+    │   │   │       ├── IdentityProviderUser.js
+    │   │   │       ├── InternalConfig.js
+    │   │   │       ├── Label.js
+    │   │   │       ├── List.js
+    │   │   │       ├── Notification.js
+    │   │   │       ├── NotificationService.js
+    │   │   │       ├── Project.js
+    │   │   │       ├── ProjectFavorite.js
+    │   │   │       ├── ProjectManager.js
+    │   │   │       ├── Session.js
+    │   │   │       ├── StorageUsage.js
+    │   │   │       ├── Task.js
+    │   │   │       ├── TaskList.js
+    │   │   │       ├── UploadedFile.js
+    │   │   │       ├── User.js
+    │   │   │       └── Webhook.js
+    │   │   ├── s3
+    │   │   │   └── index.js
+    │   │   ├── terms
+    │   │   │   └── index.js
+    │   │   └── watcher
+    │   │       └── index.js
+    │   ├── models
+    │   │   ├── Action.js
+    │   │   ├── Attachment.js
+    │   │   ├── BackgroundImage.js
+    │   │   ├── BaseCustomFieldGroup.js
+    │   │   ├── Board.js
+    │   │   ├── BoardMembership.js
+    │   │   ├── BoardSubscription.js
+    │   │   ├── Card.js
+    │   │   ├── CardLabel.js
+    │   │   ├── CardMembership.js
+    │   │   ├── CardSubscription.js
+    │   │   ├── Comment.js
+    │   │   ├── Config.js
+    │   │   ├── CustomField.js
+    │   │   ├── CustomFieldGroup.js
+    │   │   ├── CustomFieldValue.js
+    │   │   ├── IdentityProviderUser.js
+    │   │   ├── InternalConfig.js
+    │   │   ├── Label.js
+    │   │   ├── List.js
+    │   │   ├── Notification.js
+    │   │   ├── NotificationService.js
+    │   │   ├── Project.js
+    │   │   ├── ProjectFavorite.js
+    │   │   ├── ProjectManager.js
+    │   │   ├── Session.js
+    │   │   ├── StorageUsage.js
+    │   │   ├── Task.js
+    │   │   ├── TaskList.js
+    │   │   ├── UploadedFile.js
+    │   │   ├── User.js
+    │   │   └── Webhook.js
+    │   ├── policies
+    │   │   ├── is-admin-or-project-owner.js
+    │   │   ├── is-admin.js
+    │   │   ├── is-authenticated.js
+    │   │   ├── is-external.js
+    │   │   ├── is-internal.js
+    │   │   └── is-session.js
+    │   └── responses
+    │       ├── conflict.js
+    │       ├── forbidden.js
+    │       ├── notFound.js
+    │       ├── unauthorized.js
+    │       ├── unprocessableEntity.js
+    │       └── validationError.js
+    ├── app.js
+    ├── build.js
+    ├── config
+    │   ├── blueprints.js
+    │   ├── bootstrap.js
+    │   ├── custom.js
+    │   ├── datastores.js
+    │   ├── env
+    │   │   ├── production.js
+    │   │   └── test.js
+    │   ├── globals.js
+    │   ├── http.js
+    │   ├── i18n.js
+    │   ├── locales
+    │   │   ├── ar-YE.json
+    │   │   ├── bg-BG.json
+    │   │   ├── ca-ES.json
+    │   │   ├── cs-CZ.json
+    │   │   ├── da-DK.json
+    │   │   ├── de-DE.json
+    │   │   ├── el-GR.json
+    │   │   ├── en-GB.json
+    │   │   ├── en-US.json
+    │   │   ├── es-ES.json
+    │   │   ├── et-EE.json
+    │   │   ├── fa-IR.json
+    │   │   ├── fi-FI.json
+    │   │   ├── fr-FR.json
+    │   │   ├── hu-HU.json
+    │   │   ├── id-ID.json
+    │   │   ├── it-IT.json
+    │   │   ├── ja-JP.json
+    │   │   ├── ko-KR.json
+    │   │   ├── nl-NL.json
+    │   │   ├── pl-PL.json
+    │   │   ├── pt-BR.json
+    │   │   ├── pt-PT.json
+    │   │   ├── ro-RO.json
+    │   │   ├── ru-RU.json
+    │   │   ├── sk-SK.json
+    │   │   ├── sr-Cyrl-RS.json
+    │   │   ├── sr-Latn-RS.json
+    │   │   ├── sv-SE.json
+    │   │   ├── tr-TR.json
+    │   │   ├── uk-UA.json
+    │   │   ├── uz-UZ.json
+    │   │   ├── vi-VN.json
+    │   │   ├── zh-CN.json
+    │   │   └── zh-TW.json
+    │   ├── log.js
+    │   ├── models.js
+    │   ├── policies.js
+    │   ├── routes.js
+    │   ├── security.js
+    │   ├── session.js
+    │   ├── sockets.js
+    │   ├── swagger.js
+    │   └── views.js
+    ├── constants.js
+    ├── data
+    ├── db
+    │   ├── create-admin-user.js
+    │   ├── init.js
+    │   ├── knexfile.js
+    │   ├── migrations
+    │   │   ├── 20250228000022_version_2.js
+    │   │   ├── 20250522151122_add_board_activity_log.js
+    │   │   ├── 20250523131647_add_comments_counter.js
+    │   │   ├── 20250603102521_canonicalize_locale_codes.js
+    │   │   ├── 20250703122452_move_webhooks_configuration_from_environment_variable_to_ui.js
+    │   │   ├── 20250708200908_persist_closed_state_per_card.js
+    │   │   ├── 20250709160208_add_ability_to_link_tasks_to_cards.js
+    │   │   ├── 20250721132312_add_ability_to_hide_completed_tasks.js
+    │   │   ├── 20250728105713_add_legal_requirements.js
+    │   │   ├── 20250820144730_track_storage_usage.js
+    │   │   ├── 20250905101408_restore_toggleable_due_dates.js
+    │   │   ├── 20250905205438_add_board_setting_to_expand_task_lists_by_default.js
+    │   │   ├── 20250917123048_add_ability_to_configure_smtp_via_ui.js
+    │   │   ├── 20251105104948_add_api_key_authentication.js
+    │   │   ├── 20251121231641_rename_gin_indexes.js
+    │   │   └── 20260122093047_add_internal_runtime_configuration.js
+    │   ├── seeds
+    │   │   └── default.js
+    │   └── upgrade.js
+    ├── generate-swagger.js
+    ├── healthcheck.js
+    ├── nodemon.json
+    ├── package-lock.json
+    ├── package.json
+    ├── patches
+    │   ├── sails+1.5.16.patch
+    │   ├── skipper-disk+0.5.12.patch
+    │   └── waterline+0.15.2.patch
+    ├── public
+    │   └── preloaded-favicons
+    │       └── codepen.io.png
+    ├── requirements.txt
+    ├── start.sh
+    ├── terms
+    │   ├── de-DE
+    │   │   ├── extended.md
+    │   │   └── general.md
+    │   └── en-US
+    │       ├── extended.md
+    │       └── general.md
+    ├── test
+    │   ├── fixtures
+    │   ├── integration
+    │   │   ├── controllers
+    │   │   ├── helpers
+    │   │   └── models
+    │   │       └── User.test.js
+    │   ├── lifecycle.test.js
+    │   ├── mocha.opts
+    │   └── utils
+    │       └── remote-address.test.js
+    ├── utils
+    │   ├── build-query-parts.js
+    │   ├── filenamify.js
+    │   ├── inputs.js
+    │   ├── logger.js
+    │   ├── mentions.js
+    │   ├── migrations.js
+    │   ├── normalize-values.js
+    │   ├── remote-address.js
+    │   ├── send_notifications.py
+    │   └── validators.js
+    ├── version-template.ejs
+    ├── version.js
+    └── views
+xawa@MacBook-Pro-Yan MedFlow % 

@@ -6,6 +6,12 @@
 const escapeMarkdown = require('escape-markdown');
 const escapeHtml = require('escape-html');
 
+// --- 1. ДОБАВЛЕНА ФУНКЦИЯ ГЕНЕРАЦИИ ID ---
+const generateId = () => {
+  return Date.now().toString() + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+};
+// -----------------------------------------
+
 const buildTitle = (action, t) => {
   switch (action.type) {
     case Action.Types.CREATE_CARD:
@@ -118,6 +124,7 @@ module.exports = {
     const { values } = inputs;
 
     const action = await Action.qm.createOne({
+      id: generateId(), // <--- 2. ВАЖНО: ПЕРЕДАЕМ ID СЮДА
       ...values,
       boardId: values.card.boardId,
       cardId: values.card.id,

@@ -260,5 +260,9 @@ module.exports = {
       collection: 'Action',
       via: 'cardId',
     },
+    masterTaskId: {
+      model: 'MasterTask',
+      columnName: 'master_task_id',
+    },
   },
 };

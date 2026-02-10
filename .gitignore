@@ -1,0 +1,40 @@
+# --- Environment Variables (Безопасность) ---
+# Никогда не отправляйте эти файлы в репозиторий!
+.env
+.env.local
+.env.*.local
+# Исключение: шаблон файла можно оставить, чтобы другие знали, какие переменные нужны
+!.env.example
+!.env.template
+
+# --- Node.js ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+# Папки сборки (обычно dist или build)
+dist/
+build/
+.npm/
+
+# --- Python & Virtual Environments (venv) ---
+# Виртуальные окружения (разные варианты названий)
+venv/
+.venv/
+env/
+.env/
+
+# Бай-код и кэши Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- IDE & OS (Системные файлы) ---
+# Mac OS
+.DS_Store
+# Windows
+Thumbs.db
+# Настройки редактора (опционально, если не хотите шарить настройки команды)
+.vscode/
+.idea/

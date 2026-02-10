@@ -23,6 +23,7 @@ export const HomeViewIcons = {
 
 export const UserRoleIcons = {
   [UserRoles.ADMIN]: 'user secret',
+  [UserRoles.MODERATOR]: 'shield alternate',
   [UserRoles.PROJECT_OWNER]: 'building',
   [UserRoles.BOARD_USER]: 'columns',
 };

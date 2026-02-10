@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation, Trans } from 'react-i18next';
 import { Loader } from 'semantic-ui-react';
+import { useMatch } from 'react-router-dom'; // <--- 1. Добавлен импорт для проверки адреса
 
 import selectors from '../../../selectors';
 import version from '../../../version';
@@ -21,6 +22,9 @@ import UserSettingsModal from '../../users/UserSettingsModal';
 import ProjectBackground from '../../projects/ProjectBackground';
 import AddProjectModal from '../../projects/AddProjectModal';
 
+// <--- 2. Импортируем наш новый компонент
+import CrossProjectDashboard from '../../CrossProject/CrossProjectDashboard'; 
+
 const Core = React.memo(() => {
   const isInitializing = useSelector(selectors.selectIsInitializing);
   const isSocketDisconnected = useSelector(selectors.selectIsSocketDisconnected);
@@ -28,6 +32,9 @@ const Core = React.memo(() => {
   const project = useSelector(selectors.selectCurrentProject);
   const board = useSelector(selectors.selectCurrentBoard);
   const currentUserId = useSelector(selectors.selectCurrentUserId);
+
+  // <--- 3. Проверяем, находимся ли мы на странице кросс-проектов
+  const isCrossProjectsPath = useMatch('/cross-projects');
 
   // TODO: move to selector?
   const isNewVersionAvailable = useSelector((state) => {
@@ -119,8 +126,17 @@ const Core = React.memo(() => {
         <>
           <Toaster />
           {project && project.backgroundType && <ProjectBackground />}
-          <Fixed />
-          <Static />
+          
+          {/* Fixed — это шапка (Header) и сайдбар, они остаются всегда */}
+          <Fixed /> 
+
+          {/* <--- 4. Условный рендеринг: показываем Dashboard или обычный контент */}
+          {isCrossProjectsPath ? (
+            <CrossProjectDashboard />
+          ) : (
+            <Static />
+          )}
+
           {modalNode}
         </>
       )}

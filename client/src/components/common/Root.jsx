@@ -37,6 +37,7 @@ function Root({ store, history }) {
               <Route path={Paths.PROJECTS} element={<Core />} />
               <Route path={Paths.BOARDS} element={<Core />} />
               <Route path={Paths.CARDS} element={<Core />} />
+              <Route path="/cross-projects" element={<Core />} />
               <Route path="*" element={<GhostError />} />
             </Routes>
           </ToasterProvider>

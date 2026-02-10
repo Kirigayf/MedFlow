@@ -20,8 +20,10 @@ export default {
 
   translation: {
     common: {
+      moderator: 'Модератор',
+      canManageCrossProjectTasks: "Может управлять кросс-проектными задачами и архивом.",
       aboutApp_title: 'О приложении',
-      aboutPlanka_title: 'О МИАЦ КАНБАН',
+      aboutPlanka_title: 'О БЛАНКА',
       accessToken: 'Токен доступа',
       account: 'Учетная запись',
       actions: 'Действия',
@@ -268,7 +270,7 @@ export default {
       passwordIsSet: 'Пароль установлен',
       phone: 'Телефон',
       plankaUsesAppriseToSendNotificationsToOver100PopularServices:
-        'МИАЦ КАНБАН использует <1><0>Apprise</0></1> для отправки уведомлений в более чем 100 популярных сервисов.',
+        'БЛАНКА использует <1><0>Apprise</0></1> для отправки уведомлений в более чем 100 популярных сервисов.',
       port: 'Порт',
       preferences: 'Предпочтения',
       pressPasteShortcutToAddAttachmentFromClipboard:

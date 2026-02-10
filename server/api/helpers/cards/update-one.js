@@ -382,6 +382,18 @@ module.exports = {
       });
     }
 
+    if (card.masterTaskId) {
+      // Запускаем пересчет, не дожидаясь результата (fire-and-forget),
+      // чтобы не замедлять ответ пользователю.
+      sails.helpers.masterTasks.updateProgress
+        .with({
+          masterTaskId: card.masterTaskId,
+        })
+        .catch((err) => {
+          console.error('Failed to update master task progress:', err);
+        });
+    }
+
     if (!_.isUndefined(isSubscribed)) {
       const wasSubscribed = await sails.helpers.users.isCardSubscriber(
         inputs.actorUser.id,

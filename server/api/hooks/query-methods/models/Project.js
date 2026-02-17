@@ -3,17 +3,30 @@
  * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
  */
 
+// --- 1. ДОБАВЛЕН ГЕНЕРАТОР ID ---
+const generateId = () => {
+  return Date.now().toString() + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+};
+// --------------------------------
+
 const defaultFind = (criteria) => Project.find(criteria).sort('id');
 
 /* Query methods */
 
 const createOne = (values, { user } = {}) =>
   sails.getDatastore().transaction(async (db) => {
-    let project = await Project.create({ ...values })
+    
+    // --- 2. ДОБАВЛЕН ID ДЛЯ ПРОЕКТА ---
+    let project = await Project.create({ 
+      id: generateId(), // <--- ВАЖНО
+      ...values 
+    })
       .fetch()
       .usingConnection(db);
 
+    // --- 3. ДОБАВЛЕН ID ДЛЯ МЕНЕДЖЕРА ---
     const projectManager = await ProjectManager.create({
+      id: generateId(), // <--- ВАЖНО
       projectId: project.id,
       userId: user.id,
     })

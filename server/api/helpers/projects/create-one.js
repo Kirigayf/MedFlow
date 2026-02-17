@@ -3,6 +3,12 @@
  * Licensed under the Fair Use License: https://github.com/plankanban/planka/blob/master/LICENSE.md
  */
 
+// --- 1. ДОБАВЛЯЕМ ГЕНЕРАТОР ID ---
+const generateId = () => {
+  return Date.now().toString() + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+};
+// ---------------------------------
+
 module.exports = {
   inputs: {
     values: {
@@ -21,7 +27,16 @@ module.exports = {
   async fn(inputs) {
     const { values } = inputs;
 
-    const { project, projectManager } = await Project.qm.createOne(values, {
+    // --- 2. ГЕНЕРИРУЕМ ID И ДОБАВЛЯЕМ В VALUES ---
+    // Мы принудительно добавляем ID в объект значений перед созданием
+    const valuesWithId = {
+      id: generateId(),
+      ...values
+    };
+    // ----------------------------------------------
+
+    // Передаем обновленный объект valuesWithId
+    const { project, projectManager } = await Project.qm.createOne(valuesWithId, {
       user: inputs.actorUser,
     });
 

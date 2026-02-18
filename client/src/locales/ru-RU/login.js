@@ -15,7 +15,7 @@ export default {
       or: 'Или',
       pageNotFound_title: 'Страница не найдена',
       password: 'Пароль',
-      poweredByPlanka: 'Powered by <1>"БЛАНКА"</1>',
+      poweredByPlanka: 'Powered by <1>"Dелай"</1>',
       serverConnectionFailed: 'Не могу подключиться к серверу',
       unknownError: 'Что-то пошло не так, попробуйте позже',
       useSingleSignOn: 'Используйте единый вход',

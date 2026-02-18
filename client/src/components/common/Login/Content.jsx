@@ -21,6 +21,7 @@ import AccessTokenSteps from '../../../constants/AccessTokenSteps';
 import TermsModal from './TermsModal';
 
 import logo from '../../../assets/images/logo.png';
+import logoImageBlack from '../../../assets/images/black_logo.png';
 
 import styles from './Content.module.scss';
 
@@ -200,13 +201,14 @@ const Content = React.memo(() => {
         <Grid.Column computer={6} tablet={16} mobile={16} className={styles.gridItem}>
           <div className={styles.login}>
             <div className={styles.form}>
-              <div className={styles.logoWrapper}>
-                <img src={logo} alt="" className={styles.logo} />
-              </div>
               <Header
                 as="h1"
                 textAlign="center"
-                content={bootstrap.instanceName || 'Dелай'}
+                content={bootstrap.instanceName || <img 
+                            src={logoImageBlack} 
+                            alt="Логотип" 
+                            style={{ height: '100px', width: 'auto'}}
+                          />}
                 className={styles.formTitle}
               />
               <Header

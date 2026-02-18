@@ -12,6 +12,7 @@ import { BoardMembershipRoles, BoardViews, UserRoles } from '../../../constants/
 import UserAvatar from '../../users/UserAvatar';
 import UserActionsStep from '../../users/UserActionsStep';
 import NotificationsStep from '../../notifications/NotificationsStep';
+import logoImageWhite from '../../../assets/images/white_logo.png';
 
 import styles from './Header.module.scss';
 
@@ -90,8 +91,12 @@ const Header = React.memo(() => {
   return (
     <div className={styles.wrapper}>
       {!project && (
-        <Link to={Paths.ROOT} className={classNames(styles.logo, styles.title)}>
-          Dелай
+        <Link to={Paths.ROOT} className={classNames(styles.logo, styles.title)} style={{display: 'flex', alignItems: "center"}}>
+          <img 
+            src={logoImageWhite} 
+            alt="Логотип" 
+            style={{ height: '30px', width: 'auto'}}
+          />
         </Link>
       )}
       <Menu inverted size="large" className={styles.menu}>

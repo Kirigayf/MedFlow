@@ -10,7 +10,7 @@ import { Divider, Header, Image, Loader, Tab } from 'semantic-ui-react';
 import version from '../../../version';
 import Markdown from '../Markdown';
 
-import aboutLogo from '../../../assets/images/about-logo.png';
+import aboutLogo from '../../../assets/images/black_logo.png';
 import whatsNewUrl from '../../../assets/docs/whats-new.md?url';
 
 import styles from './AboutPane.module.scss';

@@ -25,6 +25,13 @@ export default defineConfig({
     host: true,
     port: 3000,
     open: true,
+    allowedHosts: ['delay.miac53.ru'],
+    hmr: {
+      host: 'delay.miac53.ru',
+      protocol: 'wss',
+      clientPort: 443,
+      path: '/vite-hmr'
+    },
   },
   build: {
     target: browserslistToEsbuild(['>0.2%', 'not dead', 'not op_mini all']),

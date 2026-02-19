@@ -1,9 +1,11 @@
 services:
   planka:
     # Вместо image используем build, чтобы запечь ваши изменения кода
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    # build: 
+    #  context: .
+    #  dockerfile: Dockerfile
+    image: my-planka
+    pull_policy: never
     restart: on-failure
     volumes:
       # Сохраняем загруженные файлы (аватарки, вложения)
@@ -12,18 +14,18 @@ services:
     ports:
       - 3000:1337
     environment:
-      - BASE_URL=http://localhost:3000
-      - DATABASE_URL=postgresql://postgres@postgres/planka
-      - SECRET_KEY=change-this-random-string-to-something-very-long-and-secure
+      - BASE_URL=http://172.16.244.210:3000
+      - DATABASE_URL=postgresql://postgres:Zdrav53_Miac@postgres/planka
+      - SECRET_KEY=301fc9842d7b840ff6a1f009046c311d7104fac7747af64dd38976c45decf2d17a55747f48bb927a8a72508c821d4e4388f5dfb2298a293112b4dc695439e539
       
       # Язык по умолчанию
       - DEFAULT_LANGUAGE=ru-RU
 
       # Администратор по умолчанию (создастся при первом запуске)
-      - DEFAULT_ADMIN_EMAIL=admin@admin.com
-      - DEFAULT_ADMIN_PASSWORD=admin
-      - DEFAULT_ADMIN_NAME=Admin
-      - DEFAULT_ADMIN_USERNAME=admin
+      - DEFAULT_ADMIN_EMAIL=leader@miac53.com
+      - DEFAULT_ADMIN_PASSWORD=Zdrav53_Miac
+      - DEFAULT_ADMIN_NAME=leader
+      - DEFAULT_ADMIN_USERNAME=leader
       
       # Настройки доверия прокси (если будете ставить Nginx перед Докером)
       - TRUST_PROXY=true

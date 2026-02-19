@@ -80,7 +80,7 @@ module.exports = {
      * https://sailsjs.com/docs/concepts/models-and-orm/model-settings#?migrate
      *
      */
-    // migrate: 'safe',
+     migrate: 'safe',
     /**
      *
      * If, in production, this app has access to physical-layer CASCADE
@@ -338,7 +338,7 @@ module.exports = {
    */
 
   custom: {
-    // baseUrl: 'https://example.com',
+    baseUrl: 'https://delay.miac53.ru',
     // internalEmailAddress: 'support@example.com',
   },
 };

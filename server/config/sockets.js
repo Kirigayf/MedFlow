@@ -10,6 +10,14 @@
  */
 
 module.exports.sockets = {
+
+  onlyAllowOrigins: [
+    'https://delay.miac53.ru',
+    'http://localhost:3000',
+    'http://172.16.244.210:3000'
+  ],
+
+
   /**
    *
    * `transports`

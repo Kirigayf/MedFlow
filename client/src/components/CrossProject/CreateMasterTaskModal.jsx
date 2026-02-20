@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux'; // Добавлен импорт useSelector
 import { Modal, Form, Button, Message, Icon, Dropdown, Checkbox, Input } from 'semantic-ui-react';
 import * as api from '../../api/master-tasks';
+import selectors from '../../selectors'; // Добавлен импорт селекторов
 import * as AccessTokenStorage from '../../utils/access-token-storage';
 import socket from '../../api/socket';
 
@@ -10,6 +12,9 @@ const LABEL_COLORS = ['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue
 const PREFERRED_LIST_NAMES = ['Задачи', 'Tasks', 'To Do', 'Входящие'];
 
 const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
+  // Получаем текущего пользователя из Redux
+  const currentUser = useSelector(selectors.selectCurrentUser);
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   
@@ -161,7 +166,7 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
 
     return dataTree.reduce((acc, project) => {
       const projectMatches = project.name?.toLowerCase().includes(lowerFilter);
-      const matchingBoards = project.boards.filter(b => b.name.toLowerCase().includes(lowerFilter));
+      const matchingBoards = project.boards.filter(b => b.name?.toLowerCase().includes(lowerFilter));
       
       if (projectMatches) {
         // Если проект подходит, показываем его целиком
@@ -224,7 +229,9 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
         name,
         description,
         targets: targetsPayload,
-        labels: labelsPayload
+        labels: labelsPayload,
+        // Передаем ID создателя, чтобы бэкенд мог добавить его как участника
+        userIds: currentUser ? [currentUser.id] : []
       }, headers);
 
       onCreate(item);
@@ -235,7 +242,7 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
     } finally {
       setSubmitting(false);
     }
-  }, [name, description, selectedBoards, selectedLabels, onCreate, onClose]);
+  }, [name, description, selectedBoards, selectedLabels, currentUser, onCreate, onClose]);
 
   return (
     <Modal open={open} onClose={onClose} size="large" dimmer="blurring">

@@ -22,8 +22,18 @@ module.exports = {
       description,
       dueDate,
       memberIds,
+      userIds, // <--- Получаем ID из нового фронтенда
       labels 
     } = values;
+
+    // === СОБИРАЕМ ВСЕХ УЧАСТНИКОВ ===
+    let allMemberIds = [];
+    if (Array.isArray(memberIds)) allMemberIds.push(...memberIds);
+    if (Array.isArray(userIds)) allMemberIds.push(...userIds);
+    if (user && user.id) allMemberIds.push(user.id); // Обязательно добавляем самого создателя
+    
+    // Убираем дубликаты (чтобы не пытаться добавить одного человека дважды)
+    allMemberIds = [...new Set(allMemberIds)];
 
     // 1. Создаем Мастер-Задачу (с ручным ID)
     const masterTask = await MasterTask.create({
@@ -54,10 +64,9 @@ module.exports = {
         const newCardId = generateId(); 
 
         // --- Создаем Карточку ---
-        // Передаем сгенерированный ID внутрь values
         const createdCard = await sails.helpers.cards.createOne.with({
           values: {
-            id: newCardId, // <--- ВАЖНО: Передаем ID сюда
+            id: newCardId, 
             name,
             description,
             list: list,
@@ -72,17 +81,26 @@ module.exports = {
           request: inputs.request,
         });
 
-        // Получаем ID (на всякий случай берем наш generated, если helper не вернул)
         const cardId = createdCard.id || (createdCard.item && createdCard.item.id) || newCardId;
 
-        // --- Участники ---
-        if (memberIds && memberIds.length > 0) {
+        // --- ПРИВЯЗЫВАЕМ УЧАСТНИКОВ (И АВАТАРКИ) К КАРТОЧКЕ ---
+        if (allMemberIds.length > 0) {
+          // Ищем, кто из списка реально состоит в этой доске
           const boardMembers = await BoardMembership.find({
             boardId: board.id,
-            userId: { in: memberIds }
+            userId: { in: allMemberIds }
           });
           
-          const validUserIds = boardMembers.map(m => m.userId);
+          let validUserIds = boardMembers.map(m => m.userId);
+
+          // === ВАЖНОЕ ИСКЛЮЧЕНИЕ ДЛЯ АДМИНОВ И МОДЕРАТОРОВ ===
+          // Если создатель имеет высшие права, его может не быть в участниках доски.
+          // Поэтому мы принудительно разрешаем ему быть на карточке!
+          if (user && (user.role === 'admin' || user.role === 'moderator' || user.role === 'project_owner')) {
+            if (!validUserIds.includes(user.id)) {
+              validUserIds.push(user.id);
+            }
+          }
 
           if (validUserIds.length > 0) {
              const memberships = validUserIds.map(uid => ({
@@ -90,8 +108,11 @@ module.exports = {
               userId: uid
             }));
             try {
+              // Привязываем людей к карточке
               await CardMembership.createEach(memberships).tolerate('E_UNIQUE');
-            } catch (e) {}
+            } catch (e) {
+              console.error('Ошибка привязки участника к карточке:', e);
+            }
           }
         }
       }

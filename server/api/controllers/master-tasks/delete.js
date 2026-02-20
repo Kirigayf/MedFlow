@@ -5,18 +5,28 @@ module.exports = {
 
   exits: {
     success: { responseType: 'ok' },
+    notFound: { responseType: 'notFound' },
   },
 
   async fn(inputs) {
-    // 1. Сначала "отвязываем" все дочерние карточки
-    // Они останутся на досках, но перестанут ссылаться на удаляемую мастер-задачу
-    await Card.update({ masterTaskId: inputs.id }).set({
-      masterTaskId: null
-    });
+    const { id } = inputs;
 
-    // 2. Удаляем саму мастер-задачу
-    await MasterTask.destroyOne({ id: inputs.id });
+    // 1. Проверяем, существует ли такая мастер-задача
+    const task = await MasterTask.findOne({ id });
+    if (!task) {
+      throw 'notFound';
+    }
 
-    return {};
+    // === ГЛАВНАЯ МАГИЯ: УДАЛЕНИЕ ВСЕХ КЛОНОВ ===
+    // Находим и навсегда удаляем все карточки на досках, привязанные к этой задаче
+    await Card.destroy({ masterTaskId: id });
+    // ============================================
+
+    // 2. Удаляем саму мастер-задачу из базы
+    await MasterTask.destroy({ id });
+
+    return {
+      item: task,
+    };
   }
 };

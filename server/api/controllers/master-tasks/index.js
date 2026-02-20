@@ -11,12 +11,7 @@ module.exports = {
 
     // === ПРОВЕРКА РОЛЕЙ ===
     // Разрешаем доступ только Админам, Модераторам и Владельцам проектов
-    const isAuthorized = [
-      'admin', 
-      'moderator', 
-      'projectOwner'
-    ].includes(currentUser.role);
-
+    const isAuthorized = ['admin', 'moderator', 'projectOwner'].includes(currentUser.role);
     if (!isAuthorized) {
       throw 'notEnoughRights';
     }

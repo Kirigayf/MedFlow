@@ -8,6 +8,11 @@ module.exports = {
   async fn() {
     const { currentUser } = this.req;
 
+    const isAuthorized = ['admin', 'moderator', 'projectOwner'].includes(currentUser.role);
+    if (!isAuthorized) {
+      throw 'notEnoughRights';
+    }
+
     // 1. Получаем проекты, доступные пользователю
     // Используем существующий хелпер Planka или ищем напрямую
     // Для надежности найдем проекты, где пользователь является участником или менеджером

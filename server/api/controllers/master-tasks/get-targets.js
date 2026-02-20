@@ -3,59 +3,73 @@ module.exports = {
 
   exits: {
     success: { responseType: 'ok' },
+    notEnoughRights: { responseType: 'forbidden' },
   },
 
-  async fn() {
+  async fn(inputs) {
     const { currentUser } = this.req;
 
+    // Проверка базового доступа к кросс-проектному функционалу
     const isAuthorized = ['admin', 'moderator', 'projectOwner'].includes(currentUser.role);
     if (!isAuthorized) {
       throw 'notEnoughRights';
     }
 
-    // 1. Получаем проекты, доступные пользователю
-    // Используем существующий хелпер Planka или ищем напрямую
-    // Для надежности найдем проекты, где пользователь является участником или менеджером
-    // Но так как в Planka сложная система прав, упростим: берем все проекты (фильтрацию добавите по необходимости)
-    // В идеале: const projectIds = await sails.helpers.users.getAccessibleProjectIds(currentUser.id);
-    const projects = await Project.find().sort('name ASC');
+    // 1. Получаем все проекты, где пользователь является менеджером
+    const managedProjectIds = await sails.helpers.users.getManagerProjectIds(currentUser.id);
 
-    // 2. Получаем доски для этих проектов
-    const projectIds = projects.map(p => p.id);
-    const boards = await Board.find({ projectId: projectIds }).sort('name ASC');
+    // 2. Получаем все членства пользователя в досках
+    const boardMemberships = await BoardMembership.find({ userId: currentUser.id });
+    const memberBoardIds = boardMemberships.map(bm => bm.boardId);
 
-    // 3. Получаем списки для этих досок
-    const boardIds = boards.map(b => b.id);
-    const lists = await List.find({ boardId: boardIds }).sort('position ASC');
+    // 3. Находим все проекты, в которых у пользователя есть доступ хотя бы к одной доске
+    const membershipBoards = await Board.find({ id: memberBoardIds });
+    const membershipProjectIds = membershipBoards.map(b => b.projectId);
 
-    // 4. Собираем дерево
-    const tree = projects.map(project => {
-      const projectBoards = boards
-        .filter(b => b.projectId === project.id)
-        .map(board => {
-          const boardLists = lists
-            .filter(l => l.boardId === board.id)
-            .map(list => ({
-              id: list.id,
-              name: list.name
-            }));
-          
-          return {
-            id: board.id,
-            name: board.name,
-            lists: boardLists
-          };
-        });
+    // Объединяем ID всех доступных проектов
+    const allAccessibleProjectIds = _.uniq([...managedProjectIds, ...membershipProjectIds]);
 
-      return {
+    // 4. Загружаем проекты с их досками
+    const projects = await Project.find({ id: allAccessibleProjectIds }).populate('boards');
+
+    const result = [];
+
+    for (const project of projects) {
+      const projectData = {
         id: project.id,
         name: project.name,
-        boards: projectBoards
+        boards: []
       };
-    });
+
+      for (const board of project.boards) {
+        // Доска добавляется в дерево, если:
+        // - Пользователь админ/модератор (видят всё)
+        // - Пользователь менеджер этого проекта
+        // - Пользователь является участником конкретно этой доски
+        const isManager = managedProjectIds.includes(project.id);
+        const isMember = memberBoardIds.includes(board.id);
+        const isPowerUser = ['admin', 'moderator'].includes(currentUser.role);
+
+        if (isPowerUser || isManager || isMember) {
+          // Загружаем списки для доски, чтобы можно было выбрать целевой список
+          const lists = await List.find({ boardId: board.id }).sort('position ASC');
+          
+          projectData.boards.push({
+            id: board.id,
+            name: board.name,
+            lists: lists.map(l => ({ id: l.id, name: l.name }))
+          });
+        }
+      }
+
+      // Добавляем проект в дерево только если в нем есть хотя бы одна доступная доска
+      if (projectData.boards.length > 0) {
+        result.push(projectData);
+      }
+    }
 
     return {
-      items: tree
+      items: result
     };
   }
 };

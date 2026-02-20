@@ -63,12 +63,20 @@ module.exports = {
         // --- Генерируем ID для карточки ---
         const newCardId = generateId(); 
 
+        const orgName = user.organization || user.username || 'Организация не указана';
+        const senderName = user.name || 'Неизвестный отправитель';
+
+        const cardNameWithOrg = `[${orgName}] ${name}`;
+
+        const signature = `\n\n---\n**Отправитель:** ${senderName} (${orgName})`;
+        const cardDescriptionWithSignature = (description ? description : '') + signature;
+
         // --- Создаем Карточку ---
         const createdCard = await sails.helpers.cards.createOne.with({
           values: {
             id: newCardId, 
-            name,
-            description,
+            name: cardNameWithOrg,                  // <--- Используем обновленное название
+            description: cardDescriptionWithSignature, // <--- Используем обновленное описание
             list: list,
             board: board,
             creatorUser: user,

@@ -319,6 +319,13 @@ module.exports = {
       'isSubscribed',
     ]);
 
+    if (card.masterTaskId && currentUser.id !== card.creatorUserId) {
+      // Удаляем название и описание из данных на обновление. 
+      // Сервер просто проигнорирует их, но сохранит перемещения по колонкам и т.д.
+      delete values.name;
+      delete values.description;
+    }
+
     card = await sails.helpers.cards.updateOne
       .with({
         project,

@@ -4,11 +4,11 @@
  */
 
 import { dequal } from 'dequal';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import TextareaAutosize from 'react-textarea-autosize';
-import { Button, Form, Input, TextArea } from 'semantic-ui-react';
+import { Button, Form, Input, TextArea, Dropdown } from 'semantic-ui-react'; // Добавлен Dropdown
 
 import selectors from '../../../../selectors';
 import entryActions from '../../../../entry-actions';
@@ -23,25 +23,45 @@ const EditInformation = React.memo(() => {
   const dispatch = useDispatch();
   const [t] = useTranslation();
 
+  // === ДОБАВЛЕНО ПОЛЕ CATEGORIES ===
   const defaultData = useMemo(
     () => ({
       name: project.name,
       description: project.description,
+      categories: project.categories || [], // Берем массив категорий из проекта (или пустой массив)
     }),
-    [project.name, project.description],
+    [project.name, project.description, project.categories],
   );
 
-  const [data, handleFieldChange] = useForm(() => ({
+  const [data, handleFieldChange, setData] = useForm(() => ({
     name: '',
     ...defaultData,
     description: defaultData.description || '',
+    categories: defaultData.categories || [],
   }));
+
+  // Состояние для вариантов выбора в Dropdown (чтобы можно было добавлять свои)
+  const [categoryOptions, setCategoryOptions] = useState(
+    (defaultData.categories || []).map(cat => ({ key: cat, text: cat, value: cat }))
+  );
+
+  // Обработчик добавления новой категории (по нажатию Enter в Dropdown)
+  const handleCategoryAddition = (e, { value }) => {
+    setCategoryOptions((prevOptions) => [{ key: value, text: value, value }, ...prevOptions]);
+  };
+
+  // Обработчик изменения выбора в Dropdown
+  const handleCategoryChange = (e, { value }) => {
+    setData((prevData) => ({ ...prevData, categories: value }));
+  };
+  // ===================================
 
   const cleanData = useMemo(
     () => ({
       ...data,
       name: data.name.trim(),
       description: data.description.trim() || null,
+      categories: data.categories || [], // Гарантируем отправку массива
     }),
     [data],
   );
@@ -82,6 +102,25 @@ const EditInformation = React.memo(() => {
         className={styles.field}
         onChange={handleFieldChange}
       />
+
+      {/* === НОВОЕ ПОЛЕ ВВОДА ДЛЯ КАТЕГОРИЙ === */}
+      <div className={styles.text}>Категории проекта (теги)</div>
+      <Dropdown
+        options={categoryOptions}
+        placeholder="Введите тег и нажмите Enter (например: Медицина)"
+        search
+        selection
+        fluid
+        multiple
+        allowAdditions
+        value={data.categories}
+        onAddItem={handleCategoryAddition}
+        onChange={handleCategoryChange}
+        className={styles.field}
+        style={{ marginBottom: '1rem' }}
+      />
+      {/* ======================================== */}
+
       <div className={styles.text}>{t('common.description')}</div>
       <TextArea
         as={TextareaAutosize}

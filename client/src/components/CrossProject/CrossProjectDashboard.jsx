@@ -72,7 +72,7 @@ const CrossProjectDashboard = () => {
   const handleOpenTask = (task) => {
     // Теперь мы берем ID прямо из того, что прислал сервер!
     if (task.linkedBoardId && task.linkedCardId) {
-      history.push(`/boards/${task.linkedBoardId}/cards/${task.linkedCardId}`);
+      history.push(`/cards/${task.linkedCardId}`);
     } else {
       alert('Связанная карточка не найдена. Возможно, она удалена с досок.');
     }

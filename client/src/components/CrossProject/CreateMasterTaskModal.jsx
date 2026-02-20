@@ -18,8 +18,9 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   
-  // Метки
+  // Метки: храним только массив строк (названий) выбранных меток
   const [selectedLabels, setSelectedLabels] = useState([]); 
+  // Опции: массив объектов { key, text, value, color }
   const [labelOptions, setLabelOptions] = useState([]); 
 
   const [isSubmitting, setSubmitting] = useState(false);
@@ -34,7 +35,6 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
   const [expandedProjectIds, setExpandedProjectIds] = useState([]);
 
   // ВЫБРАННЫЕ ЦЕЛИ: Ключ = boardId, Значение = listId
-  // Мы храним только выбранные доски. Если доска в объекте - значит она выбрана.
   const [selectedBoards, setSelectedBoards] = useState({}); 
 
   useEffect(() => {
@@ -71,43 +71,32 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
 
   // --- ХЕЛПЕРЫ ЛОГИКИ ---
 
-  // Функция для поиска "лучшего" списка по умолчанию
   const findDefaultListId = (board) => {
     if (!board.lists || board.lists.length === 0) return null;
-    
-    // 1. Ищем по приоритетным названиям
     for (const listName of PREFERRED_LIST_NAMES) {
       const found = board.lists.find(l => l.name?.toLowerCase() === listName.toLowerCase());
       if (found) return found.id;
     }
-    
-    // 2. Если не нашли, берем первый попавшийся
     return board.lists[0].id;
   };
 
   // --- ОБРАБОТЧИКИ НАЖАТИЙ ---
 
-  // Клик по Доске
   const handleBoardToggle = (board) => {
     setSelectedBoards(prev => {
       const newState = { ...prev };
       if (newState[board.id]) {
-        delete newState[board.id]; // Убрать выделение
+        delete newState[board.id];
       } else {
         const listId = findDefaultListId(board);
-        if (listId) {
-          newState[board.id] = listId; // Выбрать (с дефолтным списком)
-        }
+        if (listId) newState[board.id] = listId;
       }
       return newState;
     });
   };
 
-  // Клик по Проекту (Выбрать все доски проекта / Снять все)
   const handleProjectToggle = (project) => {
-    // Проверяем, все ли доски уже выбраны
     const allSelected = project.boards.length > 0 && project.boards.every(b => selectedBoards[b.id]);
-
     setSelectedBoards(prev => {
       const newState = { ...prev };
       project.boards.forEach(board => {
@@ -115,33 +104,23 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
           delete newState[board.id];
         } else {
           const listId = findDefaultListId(board);
-          if (listId) {
-            newState[board.id] = listId;
-          }
+          if (listId) newState[board.id] = listId;
         }
       });
       return newState;
     });
   };
 
-  // Изменение конкретного списка у выбранной доски
   const handleListChange = (boardId, newListId) => {
-    setSelectedBoards(prev => ({
-      ...prev,
-      [boardId]: newListId
-    }));
+    setSelectedBoards(prev => ({ ...prev, [boardId]: newListId }));
   };
 
-  // Раскрытие/Скрытие аккордеона проекта
   const toggleProjectExpand = (projectId) => {
     setExpandedProjectIds(prev => 
-      prev.includes(projectId) 
-        ? prev.filter(id => id !== projectId) 
-        : [...prev, projectId]
+      prev.includes(projectId) ? prev.filter(id => id !== projectId) : [...prev, projectId]
     );
   };
 
-  // Глобальные кнопки
   const handleSelectAll = () => {
     const newState = { ...selectedBoards };
     filteredProjects.forEach(p => {
@@ -155,20 +134,15 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
     setSelectedBoards(newState);
   };
 
-  const handleDeselectAll = () => {
-    setSelectedBoards({});
-  };
+  const handleDeselectAll = () => setSelectedBoards({});
 
-  // --- UI ФИЛЬТРАЦИЯ С ПОДДЕРЖКОЙ КАТЕГОРИЙ ---
+  // --- UI ФИЛЬТРАЦИЯ ---
   const filteredProjects = useMemo(() => {
     if (!filterText) return dataTree;
     const lowerFilter = filterText.toLowerCase();
 
     return dataTree.reduce((acc, project) => {
-      // 1. Проверяем совпадение по имени проекта
       const nameMatches = project.name?.toLowerCase().includes(lowerFilter);
-      
-      // 2. Проверяем совпадение по массиву категорий (тегов)
       const categoryMatches = project.categories && project.categories.some(cat => 
         cat.toLowerCase().includes(lowerFilter)
       );
@@ -177,45 +151,40 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
       const matchingBoards = project.boards.filter(b => b.name?.toLowerCase().includes(lowerFilter));
       
       if (projectMatches) {
-        // Если проект подходит по имени или категории, показываем его со всеми досками
         acc.push(project);
       } else if (matchingBoards.length > 0) {
-        // Если проект не подходит, но есть подходящие доски по названию доски
-        acc.push({
-          ...project,
-          boards: matchingBoards 
-        });
+        acc.push({ ...project, boards: matchingBoards });
       }
       return acc;
     }, []);
   }, [dataTree, filterText]);
 
-  // Авто-раскрытие при поиске
   useEffect(() => {
-    if (filterText) {
-      setExpandedProjectIds(filteredProjects.map(p => p.id));
-    }
+    if (filterText) setExpandedProjectIds(filteredProjects.map(p => p.id));
   }, [filterText, filteredProjects]);
 
 
-  // --- ОТПРАВКА ---
-  const handleLabelAdd = (e, { value }) => {
-    const newLabels = value.map(val => {
-      const existing = labelOptions.find(opt => opt.value === val);
-      if (existing) return existing;
+  // --- МЕТКИ (ЛОГИКА БЕЗ ДУБЛЕЙ) ---
+
+  const handleLabelAddition = (e, { value }) => {
+    setLabelOptions((prev) => {
+      // Проверяем, существует ли уже такая метка в опциях
+      if (prev.some(opt => opt.value === value)) return prev;
+      
       const randomColor = LABEL_COLORS[Math.floor(Math.random() * LABEL_COLORS.length)];
-      const newOption = { text: val, value: val, color: randomColor };
-      setLabelOptions(prev => [...prev, newOption]);
-      return newOption;
+      return [{ key: value, text: value, value: value, color: randomColor }, ...prev];
     });
-    setSelectedLabels(newLabels);
   };
-  const renderLabel = (label) => ({ color: label.color, content: label.text });
+
+  const handleLabelChange = (e, { value }) => {
+    setSelectedLabels(value); // value — это массив строк (выбранных значений)
+  };
+
+  // --- ОТПРАВКА ---
 
   const handleSubmit = useCallback(async () => {
     if (!name.trim()) return;
 
-    // Превращаем map selectedBoards в массив targets
     const targetsPayload = Object.keys(selectedBoards).map(boardId => ({
       listId: selectedBoards[boardId]
     }));
@@ -231,14 +200,21 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
     try {
       const accessToken = AccessTokenStorage.getAccessToken();
       const headers = { Authorization: `Bearer ${accessToken}` };
-      const labelsPayload = selectedLabels.map(l => ({ name: l.text, color: l.color }));
+      
+      // Собираем payload для меток, находя цвета в опциях
+      const labelsPayload = selectedLabels.map(val => {
+        const option = labelOptions.find(opt => opt.value === val);
+        return {
+          name: val,
+          color: option ? option.color : 'grey'
+        };
+      });
 
       const { item } = await api.createMasterTask({
         name,
         description,
         targets: targetsPayload,
         labels: labelsPayload,
-        // Передаем ID создателя, чтобы бэкенд мог добавить его как участника
         userIds: currentUser ? [currentUser.id] : []
       }, headers);
 
@@ -250,7 +226,7 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
     } finally {
       setSubmitting(false);
     }
-  }, [name, description, selectedBoards, selectedLabels, currentUser, onCreate, onClose]);
+  }, [name, description, selectedBoards, selectedLabels, labelOptions, currentUser, onCreate, onClose]);
 
   return (
     <Modal open={open} onClose={onClose} size="large" dimmer="blurring">
@@ -274,10 +250,10 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
               options={labelOptions}
               placeholder="Срочно, Баг..."
               search selection fluid multiple allowAdditions
-              value={selectedLabels.map(l => l.value)}
-              onAddItem={(e, { value }) => handleLabelAdd(null, { value: [...selectedLabels.map(l => l.value), value] })}
-              onChange={handleLabelAdd}
-              renderLabel={renderLabel}
+              value={selectedLabels}
+              onAddItem={handleLabelAddition}
+              onChange={handleLabelChange}
+              renderLabel={(label) => ({ color: label.color, content: label.text })}
             />
           </Form.Field>
 
@@ -291,7 +267,6 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
           <Form.Field>
             <label>Выбор досок ({Object.keys(selectedBoards).length} выбрано)</label>
             
-            {/* Панель управления */}
             <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                <Input 
                  icon="search" 
@@ -304,24 +279,19 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
                <Button size="tiny" onClick={handleDeselectAll}>Снять все</Button>
             </div>
 
-            {/* ДЕРЕВО ПРОЕКТОВ */}
             <div style={{ maxHeight: '350px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px', padding: '10px', background: '#fafafa' }}>
-              
               {isLoadingData ? (
                  <div style={{textAlign:'center', color:'#999', padding: '20px'}}>Загрузка проектов...</div>
               ) : filteredProjects.length === 0 ? (
                  <div style={{textAlign:'center', color:'#999', padding: '20px'}}>Ничего не найдено</div>
               ) : (
                 filteredProjects.map(project => {
-                  // Вычисление состояния чекбокса проекта (выбраны ли все доски?)
                   const allSelected = project.boards.length > 0 && project.boards.every(b => selectedBoards[b.id]);
                   const someSelected = project.boards.some(b => selectedBoards[b.id]);
                   const isExpanded = expandedProjectIds.includes(project.id);
 
                   return (
                     <div key={project.id} style={{ marginBottom: '5px', background: 'white', border: '1px solid #eee', borderRadius: '4px' }}>
-                      
-                      {/* ЗАГОЛОВОК ПРОЕКТА */}
                       <div style={{ display: 'flex', alignItems: 'center', padding: '8px 10px', background: '#f0f0f0' }}>
                         <Icon 
                           name={isExpanded ? 'caret down' : 'caret right'} 
@@ -339,7 +309,6 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
                           onClick={() => toggleProjectExpand(project.id)}
                         >
                           <span style={{ fontWeight: 'bold' }}>{project.name}</span>
-                          {/* Вывод категорий проекта мелкими тегами */}
                           {project.categories && project.categories.length > 0 && (
                             <span style={{ fontSize: '0.8em', color: '#666', marginTop: '2px' }}>
                               {project.categories.join(', ')}
@@ -348,14 +317,10 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
                         </div>
                       </div>
 
-                      {/* СПИСОК ДОСОК (раскрывающийся) */}
                       {isExpanded && (
                         <div style={{ padding: '5px 10px 5px 35px' }}>
                           {project.boards.map(board => {
                             const isSelected = !!selectedBoards[board.id];
-                            const selectedListId = selectedBoards[board.id];
-                            
-                            // Опции списков для этой доски
                             const listOptions = board.lists.map(l => ({ key: l.id, value: l.id, text: l.name }));
 
                             return (
@@ -366,14 +331,12 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
                                   label={board.name}
                                   style={{ flex: '0 0 40%' }}
                                 />
-                                
-                                {/* Выбор списка (показываем только если доска выбрана) */}
                                 {isSelected && (
                                   <div style={{ flex: 1, paddingLeft: '10px' }}>
                                     <Dropdown 
                                       inline
                                       options={listOptions}
-                                      value={selectedListId}
+                                      value={selectedBoards[board.id]}
                                       onChange={(e, { value }) => handleListChange(board.id, value)}
                                       icon="list"
                                       style={{ fontSize: '0.9em' }}
@@ -390,9 +353,6 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
                   );
                 })
               )}
-            </div>
-            <div style={{ fontSize: '0.85em', color: '#888', marginTop: '5px' }}>
-              * Система автоматически выбирает список "Задачи", если он есть.
             </div>
           </Form.Field>
 

@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux'; // <-- Добавили для поиска карточек
 import { Button, Header, Icon, Loader, Segment, Progress, Message, Menu, Label, Popup } from 'semantic-ui-react';
 import * as api from '../../api/master-tasks';
 import socket from '../../api/socket';
 import * as AccessTokenStorage from '../../utils/access-token-storage';
+import history from '../../history'; // <-- Добавили для перехода в карточку
 import styles from './CrossProjectDashboard.module.scss';
 import CreateMasterTaskModal from './CreateMasterTaskModal';
 
 const CrossProjectDashboard = () => {
+  // Получаем ВСЕ карточки, которые загружены в браузере (Redux)
+  const allCards = useSelector(state => state.cards ? Object.values(state.cards.items) : []);
+
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -63,6 +68,19 @@ const CrossProjectDashboard = () => {
     }
   };
 
+  // === НОВАЯ ФУНКЦИЯ: Открытие модалки карточки ===
+  const handleOpenTask = (task) => {
+    // Ищем любую карточку, привязанную к этой мастер-задаче
+    const linkedCard = allCards.find(c => c.masterTaskId === task.id);
+    
+    if (linkedCard) {
+      // Переходим по стандартному пути Planka для открытия карточки
+      history.push(`/boards/${linkedCard.boardId}/cards/${linkedCard.id}`);
+    } else {
+      alert('Связанная карточка не найдена. Возможно, она удалена с доски или у вас нет к ней доступа.');
+    }
+  };
+
   const filteredTasks = tasks.filter(task => {
     if (activeTab === 'active') return task.status !== 'archived';
     return task.status === 'archived';
@@ -108,7 +126,6 @@ const CrossProjectDashboard = () => {
 
       {error && <Message error content={error} />}
 
-      {/* Меню вкладок с новым стилем */}
       <Menu secondary pointing inverted className={styles.tabs}>
         <Menu.Item
           name='Активные'
@@ -138,7 +155,12 @@ const CrossProjectDashboard = () => {
         ) : (
           <div className={styles.taskList}>
             {filteredTasks.map((task) => (
-              <div key={task.id} className={styles.taskCard}>
+              <div 
+                key={task.id} 
+                className={styles.taskCard} 
+                onClick={() => handleOpenTask(task)} 
+                style={{ cursor: 'pointer' }} // <-- Добавили указатель мыши
+              >
                 
                 {/* Верх: Заголовок и Статус */}
                 <div>
@@ -198,7 +220,10 @@ const CrossProjectDashboard = () => {
                           inverted 
                           basic
                           color={task.status === 'archived' ? "green" : "grey"}
-                          onClick={() => handleArchive(task)}
+                          onClick={(e) => { 
+                            e.stopPropagation(); // <-- Чтобы клик по кнопке не открывал карточку
+                            handleArchive(task); 
+                          }}
                         />
                       }
                     />
@@ -213,7 +238,10 @@ const CrossProjectDashboard = () => {
                           inverted 
                           basic 
                           color="red"
-                          onClick={() => handleDelete(task.id)}
+                          onClick={(e) => { 
+                            e.stopPropagation(); // <-- Чтобы клик по кнопке не открывал карточку
+                            handleDelete(task.id); 
+                          }}
                         />
                       }
                     />

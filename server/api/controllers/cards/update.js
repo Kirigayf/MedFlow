@@ -353,6 +353,20 @@ module.exports = {
       throw Errors.CARD_NOT_FOUND;
     }
 
+    if (card.masterTaskId && currentUser.id === card.creatorUserId) {
+      
+      // Выбираем только те поля, которые реально изменились и которые нужно синхронизировать
+      const fieldsToSync = _.pick(values, ['name', 'description', 'dueDate', 'isDueCompleted']);
+      
+      if (Object.keys(fieldsToSync).length > 0) {
+        // Находим и обновляем в базе все карточки-клоны (кроме той, которую мы сейчас редактируем)
+        await Card.update({ 
+          masterTaskId: card.masterTaskId, 
+          id: { '!=': card.id } 
+        }).set(fieldsToSync);
+      }
+    }
+
     return {
       item: card,
     };

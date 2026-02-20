@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { useSelector } from 'react-redux'; // Добавлен импорт useSelector
+import { useSelector } from 'react-redux';
 import { Modal, Form, Button, Message, Icon, Dropdown, Checkbox, Input } from 'semantic-ui-react';
 import * as api from '../../api/master-tasks';
-import selectors from '../../selectors'; // Добавлен импорт селекторов
+import selectors from '../../selectors';
 import * as AccessTokenStorage from '../../utils/access-token-storage';
 import socket from '../../api/socket';
 
@@ -61,7 +61,7 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
       const accessToken = AccessTokenStorage.getAccessToken();
       const headers = { Authorization: `Bearer ${accessToken}` };
       const { items } = await socket.get('/master-tasks/targets', undefined, headers);
-      setDataTree(items);
+      setDataTree(items || []);
     } catch (err) {
       console.error("Failed to load targets", err);
     } finally {
@@ -76,8 +76,8 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
     if (!board.lists || board.lists.length === 0) return null;
     
     // 1. Ищем по приоритетным названиям
-    for (const name of PREFERRED_LIST_NAMES) {
-      const found = board.lists.find(l => l.name?.toLowerCase() === name.toLowerCase());
+    for (const listName of PREFERRED_LIST_NAMES) {
+      const found = board.lists.find(l => l.name?.toLowerCase() === listName.toLowerCase());
       if (found) return found.id;
     }
     
@@ -159,20 +159,28 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
     setSelectedBoards({});
   };
 
-  // --- UI ФИЛЬТРАЦИЯ ---
+  // --- UI ФИЛЬТРАЦИЯ С ПОДДЕРЖКОЙ КАТЕГОРИЙ ---
   const filteredProjects = useMemo(() => {
     if (!filterText) return dataTree;
     const lowerFilter = filterText.toLowerCase();
 
     return dataTree.reduce((acc, project) => {
-      const projectMatches = project.name?.toLowerCase().includes(lowerFilter);
+      // 1. Проверяем совпадение по имени проекта
+      const nameMatches = project.name?.toLowerCase().includes(lowerFilter);
+      
+      // 2. Проверяем совпадение по массиву категорий (тегов)
+      const categoryMatches = project.categories && project.categories.some(cat => 
+        cat.toLowerCase().includes(lowerFilter)
+      );
+
+      const projectMatches = nameMatches || categoryMatches;
       const matchingBoards = project.boards.filter(b => b.name?.toLowerCase().includes(lowerFilter));
       
       if (projectMatches) {
-        // Если проект подходит, показываем его целиком
+        // Если проект подходит по имени или категории, показываем его со всеми досками
         acc.push(project);
       } else if (matchingBoards.length > 0) {
-        // Если проект не подходит, но есть подходящие доски
+        // Если проект не подходит, но есть подходящие доски по названию доски
         acc.push({
           ...project,
           boards: matchingBoards 
@@ -287,7 +295,7 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
             <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                <Input 
                  icon="search" 
-                 placeholder="Поиск по проектам и доскам..." 
+                 placeholder="Поиск по проектам (имя, категория) и доскам..." 
                  value={filterText}
                  onChange={(e) => setFilterText(e.target.value)}
                  style={{ flex: 1 }}
@@ -299,79 +307,89 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
             {/* ДЕРЕВО ПРОЕКТОВ */}
             <div style={{ maxHeight: '350px', overflowY: 'auto', border: '1px solid #ddd', borderRadius: '4px', padding: '10px', background: '#fafafa' }}>
               
-              {filteredProjects.length === 0 && <div style={{textAlign:'center', color:'#999', padding: '20px'}}>Ничего не найдено</div>}
+              {isLoadingData ? (
+                 <div style={{textAlign:'center', color:'#999', padding: '20px'}}>Загрузка проектов...</div>
+              ) : filteredProjects.length === 0 ? (
+                 <div style={{textAlign:'center', color:'#999', padding: '20px'}}>Ничего не найдено</div>
+              ) : (
+                filteredProjects.map(project => {
+                  // Вычисление состояния чекбокса проекта (выбраны ли все доски?)
+                  const allSelected = project.boards.length > 0 && project.boards.every(b => selectedBoards[b.id]);
+                  const someSelected = project.boards.some(b => selectedBoards[b.id]);
+                  const isExpanded = expandedProjectIds.includes(project.id);
 
-              {filteredProjects.map(project => {
-                // Вычисление состояния чекбокса проекта (выбраны ли все доски?)
-                const allSelected = project.boards.length > 0 && project.boards.every(b => selectedBoards[b.id]);
-                const someSelected = project.boards.some(b => selectedBoards[b.id]);
-                const isExpanded = expandedProjectIds.includes(project.id);
-
-                return (
-                  <div key={project.id} style={{ marginBottom: '5px', background: 'white', border: '1px solid #eee', borderRadius: '4px' }}>
-                    
-                    {/* ЗАГОЛОВОК ПРОЕКТА */}
-                    <div style={{ display: 'flex', alignItems: 'center', padding: '8px 10px', background: '#f0f0f0' }}>
-                      <Icon 
-                        name={isExpanded ? 'caret down' : 'caret right'} 
-                        style={{ cursor: 'pointer', marginRight: '5px' }} 
-                        onClick={() => toggleProjectExpand(project.id)}
-                      />
-                      <Checkbox 
-                        checked={allSelected} 
-                        indeterminate={!allSelected && someSelected}
-                        onChange={() => handleProjectToggle(project)}
-                        style={{ marginRight: '10px' }}
-                      />
-                      <span 
-                        style={{ fontWeight: 'bold', cursor: 'pointer', flex: 1, userSelect: 'none' }}
-                        onClick={() => toggleProjectExpand(project.id)}
-                      >
-                        {project.name}
-                      </span>
-                    </div>
-
-                    {/* СПИСОК ДОСОК (раскрывающийся) */}
-                    {isExpanded && (
-                      <div style={{ padding: '5px 10px 5px 35px' }}>
-                        {project.boards.map(board => {
-                          const isSelected = !!selectedBoards[board.id];
-                          const selectedListId = selectedBoards[board.id];
-                          
-                          // Опции списков для этой доски
-                          const listOptions = board.lists.map(l => ({ key: l.id, value: l.id, text: l.name }));
-
-                          return (
-                            <div key={board.id} style={{ display: 'flex', alignItems: 'center', padding: '4px 0', borderBottom: '1px solid #f9f9f9' }}>
-                              <Checkbox 
-                                checked={isSelected}
-                                onChange={() => handleBoardToggle(board)}
-                                label={board.name}
-                                style={{ flex: '0 0 40%' }}
-                              />
-                              
-                              {/* Выбор списка (показываем только если доска выбрана) */}
-                              {isSelected && (
-                                <div style={{ flex: 1, paddingLeft: '10px' }}>
-                                  <Dropdown 
-                                    inline
-                                    options={listOptions}
-                                    value={selectedListId}
-                                    onChange={(e, { value }) => handleListChange(board.id, value)}
-                                    icon="list"
-                                    style={{ fontSize: '0.9em' }}
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                        {project.boards.length === 0 && <div style={{color: '#999', fontSize: '0.85em', padding: '5px 0'}}>Нет досок в проекте</div>}
+                  return (
+                    <div key={project.id} style={{ marginBottom: '5px', background: 'white', border: '1px solid #eee', borderRadius: '4px' }}>
+                      
+                      {/* ЗАГОЛОВОК ПРОЕКТА */}
+                      <div style={{ display: 'flex', alignItems: 'center', padding: '8px 10px', background: '#f0f0f0' }}>
+                        <Icon 
+                          name={isExpanded ? 'caret down' : 'caret right'} 
+                          style={{ cursor: 'pointer', marginRight: '5px' }} 
+                          onClick={() => toggleProjectExpand(project.id)}
+                        />
+                        <Checkbox 
+                          checked={allSelected} 
+                          indeterminate={!allSelected && someSelected}
+                          onChange={() => handleProjectToggle(project)}
+                          style={{ marginRight: '10px' }}
+                        />
+                        <div 
+                          style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer', flex: 1, userSelect: 'none' }}
+                          onClick={() => toggleProjectExpand(project.id)}
+                        >
+                          <span style={{ fontWeight: 'bold' }}>{project.name}</span>
+                          {/* Вывод категорий проекта мелкими тегами */}
+                          {project.categories && project.categories.length > 0 && (
+                            <span style={{ fontSize: '0.8em', color: '#666', marginTop: '2px' }}>
+                              {project.categories.join(', ')}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+
+                      {/* СПИСОК ДОСОК (раскрывающийся) */}
+                      {isExpanded && (
+                        <div style={{ padding: '5px 10px 5px 35px' }}>
+                          {project.boards.map(board => {
+                            const isSelected = !!selectedBoards[board.id];
+                            const selectedListId = selectedBoards[board.id];
+                            
+                            // Опции списков для этой доски
+                            const listOptions = board.lists.map(l => ({ key: l.id, value: l.id, text: l.name }));
+
+                            return (
+                              <div key={board.id} style={{ display: 'flex', alignItems: 'center', padding: '4px 0', borderBottom: '1px solid #f9f9f9' }}>
+                                <Checkbox 
+                                  checked={isSelected}
+                                  onChange={() => handleBoardToggle(board)}
+                                  label={board.name}
+                                  style={{ flex: '0 0 40%' }}
+                                />
+                                
+                                {/* Выбор списка (показываем только если доска выбрана) */}
+                                {isSelected && (
+                                  <div style={{ flex: 1, paddingLeft: '10px' }}>
+                                    <Dropdown 
+                                      inline
+                                      options={listOptions}
+                                      value={selectedListId}
+                                      onChange={(e, { value }) => handleListChange(board.id, value)}
+                                      icon="list"
+                                      style={{ fontSize: '0.9em' }}
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                          {project.boards.length === 0 && <div style={{color: '#999', fontSize: '0.85em', padding: '5px 0'}}>Нет досок в проекте</div>}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
             </div>
             <div style={{ fontSize: '0.85em', color: '#888', marginTop: '5px' }}>
               * Система автоматически выбирает список "Задачи", если он есть.

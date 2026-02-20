@@ -6,92 +6,98 @@
 /**
  * @swagger
  * /projects/{id}:
- *   patch:
- *     summary: Update project
- *     description: Updates a project. Accessible fields depend on user permissions.
- *     tags:
- *       - Projects
- *     operationId: updateProject
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: ID of the project to update
- *         schema:
- *           type: string
- *           example: "1357158568008091264"
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               ownerProjectManagerId:
- *                 type: string
- *                 nullable: true
- *                 description: ID of the project manager who owns the project
- *                 example: "1357158568008091265"
- *               backgroundImageId:
- *                 type: string
- *                 nullable: true
- *                 description: ID of the background image used as background
- *                 example: "1357158568008091266"
- *               name:
- *                 type: string
- *                 maxLength: 128
- *                 description: Name/title of the project
- *                 example: Development Project
- *               description:
- *                 type: string
- *                 maxLength: 1024
- *                 nullable: true
- *                 description: Detailed description of the project
- *                 example: A project for developing new features...
- *               backgroundType:
- *                 type: string
- *                 enum: [gradient, image]
- *                 nullable: true
- *                 description: Type of background for the project
- *                 example: gradient
- *               backgroundGradient:
- *                 type: string
- *                 enum: [old-lime, ocean-dive, tzepesch-style, jungle-mesh, strawberry-dust, purple-rose, sun-scream, warm-rust, sky-change, green-eyes, blue-xchange, blood-orange, sour-peel, green-ninja, algae-green, coral-reef, steel-grey, heat-waves, velvet-lounge, purple-rain, blue-steel, blueish-curve, prism-light, green-mist, red-curtain]
- *                 nullable: true
- *                 description: Gradient background for the project
- *                 example: ocean-dive
- *               isHidden:
- *                 type: boolean
- *                 description: Whether the project is hidden
- *                 example: false
- *               isFavorite:
- *                 type: boolean
- *                 description: Whether the project is marked as favorite by the current user
- *                 example: true
- *     responses:
- *       200:
- *         description: Project updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               required:
- *                 - item
- *               properties:
- *                 item:
- *                   $ref: '#/components/schemas/Project'
- *       400:
- *         $ref: '#/components/responses/ValidationError'
- *       401:
- *         $ref: '#/components/responses/Unauthorized'
- *       403:
- *         $ref: '#/components/responses/Forbidden'
- *       404:
- *         $ref: '#/components/responses/NotFound'
- *       409:
- *         $ref: '#/components/responses/Conflict'
- *       422:
- *         $ref: '#/components/responses/UnprocessableEntity'
+ * patch:
+ * summary: Update project
+ * description: Updates a project. Accessible fields depend on user permissions.
+ * tags:
+ * - Projects
+ * operationId: updateProject
+ * parameters:
+ * - name: id
+ * in: path
+ * required: true
+ * description: ID of the project to update
+ * schema:
+ * type: string
+ * example: "1357158568008091264"
+ * requestBody:
+ * required: true
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * properties:
+ * ownerProjectManagerId:
+ * type: string
+ * nullable: true
+ * description: ID of the project manager who owns the project
+ * example: "1357158568008091265"
+ * backgroundImageId:
+ * type: string
+ * nullable: true
+ * description: ID of the background image used as background
+ * example: "1357158568008091266"
+ * name:
+ * type: string
+ * maxLength: 128
+ * description: Name/title of the project
+ * example: Development Project
+ * description:
+ * type: string
+ * maxLength: 1024
+ * nullable: true
+ * description: Detailed description of the project
+ * example: A project for developing new features...
+ * categories:
+ * type: array
+ * items:
+ * type: string
+ * description: Array of categories/tags for the project
+ * example: ["Медицина", "Госсектор"]
+ * backgroundType:
+ * type: string
+ * enum: [gradient, image]
+ * nullable: true
+ * description: Type of background for the project
+ * example: gradient
+ * backgroundGradient:
+ * type: string
+ * enum: [old-lime, ocean-dive, tzepesch-style, jungle-mesh, strawberry-dust, purple-rose, sun-scream, warm-rust, sky-change, green-eyes, blue-xchange, blood-orange, sour-peel, green-ninja, algae-green, coral-reef, steel-grey, heat-waves, velvet-lounge, purple-rain, blue-steel, blueish-curve, prism-light, green-mist, red-curtain]
+ * nullable: true
+ * description: Gradient background for the project
+ * example: ocean-dive
+ * isHidden:
+ * type: boolean
+ * description: Whether the project is hidden
+ * example: false
+ * isFavorite:
+ * type: boolean
+ * description: Whether the project is marked as favorite by the current user
+ * example: true
+ * responses:
+ * 200:
+ * description: Project updated successfully
+ * content:
+ * application/json:
+ * schema:
+ * type: object
+ * required:
+ * - item
+ * properties:
+ * item:
+ * $ref: '#/components/schemas/Project'
+ * 400:
+ * $ref: '#/components/responses/ValidationError'
+ * 401:
+ * $ref: '#/components/responses/Unauthorized'
+ * 403:
+ * $ref: '#/components/responses/Forbidden'
+ * 404:
+ * $ref: '#/components/responses/NotFound'
+ * 409:
+ * $ref: '#/components/responses/Conflict'
+ * 422:
+ * $ref: '#/components/responses/UnprocessableEntity'
  */
 
 const { idInput } = require('../../../utils/inputs');
@@ -148,6 +154,12 @@ module.exports = {
       maxLength: 1024,
       allowNull: true,
     },
+    // === ДОБАВЛЕНО ПОЛЕ КАТЕГОРИЙ ===
+    categories: {
+      type: 'ref', // type: 'ref' используется в Sails для принятия массивов/объектов
+      custom: (value) => Array.isArray(value), // Проверяем, что приходит именно массив
+    },
+    // ================================
     backgroundType: {
       type: 'string',
       isIn: Object.values(Project.BackgroundTypes),
@@ -222,6 +234,7 @@ module.exports = {
       availableInputKeys.push('isHidden');
     }
 
+    // Если пользователь - менеджер проекта, разрешаем редактировать детали
     if (projectManager) {
       availableInputKeys.push(
         'backgroundImageId',
@@ -229,6 +242,7 @@ module.exports = {
         'description',
         'backgroundType',
         'backgroundGradient',
+        'categories' // <-- РАЗРЕШАЕМ ОБНОВЛЯТЬ КАТЕГОРИИ
       );
     }
 
@@ -278,6 +292,7 @@ module.exports = {
       }
     }
 
+    // Собираем все разрешенные значения для сохранения в базу
     const values = _.pick(inputs, [
       'ownerProjectManagerId',
       'backgroundImageId',
@@ -287,6 +302,7 @@ module.exports = {
       'backgroundGradient',
       'isHidden',
       'isFavorite',
+      'categories', // <-- ОТПРАВЛЯЕМ КАТЕГОРИИ В БД
     ]);
 
     project = await sails.helpers.projects.updateOne

@@ -38,6 +38,7 @@ module.exports = {
       const projectData = {
         id: project.id,
         name: project.name,
+        categories: project.categories || [],
         boards: []
       };
 

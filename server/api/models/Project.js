@@ -182,5 +182,9 @@ module.exports = {
       collection: 'Board',
       via: 'projectId',
     },
+    categories: {
+      type: 'json',
+      description: 'Массив категорий (тегов) проекта, например: ["Медицина", "ИТ"]',
+    },
   },
 };

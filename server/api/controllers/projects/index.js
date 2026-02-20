@@ -102,7 +102,9 @@ module.exports = {
     const managerProjectIds = await sails.helpers.users.getManagerProjectIds(currentUser.id);
     const fullyVisibleProjectIds = [...managerProjectIds];
 
-    if (currentUser.role === User.Roles.ADMIN) {
+    // === ПРАВКА: Добавляем проверку роли MODERATOR ===
+    // Теперь модератор, как и админ, видит все проекты ("sharedProjects")
+    if (currentUser.role === User.Roles.ADMIN || currentUser.role === 'moderator') {
       sharedProjects = await Project.qm.getShared({
         exceptIdOrIds: managerProjectIds,
       });
@@ -110,6 +112,7 @@ module.exports = {
       sharedProjectIds = sails.helpers.utils.mapRecords(sharedProjects);
       fullyVisibleProjectIds.push(...sharedProjectIds);
     }
+    // ===============================================
 
     const boardMemberships = await BoardMembership.qm.getByUserId(currentUser.id);
     const membershipBoardIds = sails.helpers.utils.mapRecords(boardMemberships, 'boardId');
@@ -154,15 +157,19 @@ module.exports = {
       await CustomField.qm.getByBaseCustomFieldGroupIds(baseCustomFieldGroupsIds);
 
     let notificationServices = [];
-    if (managerProjectIds.length > 0) {
-      const managerProjectIdsSet = new Set(managerProjectIds);
+    
+    // === ПРАВКА: Уведомления для модератора ===
+    // Модератор должен видеть сервисы уведомлений для всех проектов, которые он видит полностью
+    if (fullyVisibleProjectIds.length > 0) {
+      const fullyVisibleProjectIdsSet = new Set(fullyVisibleProjectIds);
 
       const managerBoardIds = boards.flatMap((board) =>
-        managerProjectIdsSet.has(board.projectId) ? board.id : [],
+        fullyVisibleProjectIdsSet.has(board.projectId) ? board.id : [],
       );
 
       notificationServices = await NotificationService.qm.getByBoardIds(managerBoardIds);
     }
+    // ==========================================
 
     const isFavoriteByProjectId = projectFavorites.reduce(
       (result, projectFavorite) => ({

@@ -9,7 +9,7 @@ import { ListTypes, UserRoles } from '../constants/Enums';
 export const isUserStatic = (user) => [StaticUserIds.DELETED].includes(user.id);
 
 export const isUserAdminOrProjectOwner = (user) =>
-  [UserRoles.ADMIN, UserRoles.PROJECT_OWNER].includes(user.role);
+  [UserRoles.ADMIN, UserRoles.PROJECT_OWNER, 'moderator'].includes(user.role);
 
 export const isListArchiveOrTrash = (list) =>
   [ListTypes.ARCHIVE, ListTypes.TRASH].includes(list.type);

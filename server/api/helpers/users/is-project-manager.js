@@ -16,6 +16,14 @@ module.exports = {
   },
 
   async fn(inputs) {
+    // === ДАЕМ ПРАВА МОДЕРАТОРУ ===
+    // Проверяем, не является ли пользователь админом или модератором
+    const user = await User.findOne({ id: inputs.id });
+    if (user && (user.role === 'admin' || user.role === 'moderator')) {
+      return true;
+    }
+    // =============================
+
     const projectManager = await ProjectManager.qm.getOneByProjectIdAndUserId(
       inputs.projectId,
       inputs.id,

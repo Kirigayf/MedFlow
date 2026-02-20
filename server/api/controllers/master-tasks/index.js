@@ -17,7 +17,8 @@ module.exports = {
     const tasksWithLinks = [];
     for (const task of masterTasks) {
       // Ищем самую первую попавшуюся карточку с таким masterTaskId
-      const linkedCard = await Card.findOne({ masterTaskId: task.id });
+      const linkedCards = await Card.find({ masterTaskId: task.id }).limit(1);
+      const linkedCard = linkedCards.length > 0 ? linkedCards[0] : null;
       
       // Добавляем к задаче адреса доски и карточки (если нашли)
       tasksWithLinks.push({

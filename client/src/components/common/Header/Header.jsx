@@ -14,7 +14,10 @@ import UserActionsStep from '../../users/UserActionsStep';
 import NotificationsStep from '../../notifications/NotificationsStep';
 import logoImageWhite from '../../../assets/images/white_logo.png';
 
+import { isUserAdminOrProjectOwner } from '../../utils/record-helpers';
+
 import styles from './Header.module.scss';
+import { User } from '../../../models';
 
 const POPUP_PROPS = {
   position: 'bottom right',
@@ -125,7 +128,7 @@ const Header = React.memo(() => {
         
         <Menu.Menu position="right">
           {/* ИСПРАВЛЕНО: используем 'user' вместо 'currentUser' */}
-          {user && (user.role === 'admin' || user.role === 'moderator') && (
+          {user && (user.role === UserRoles.ADMIN || user.role === UserRoles.MODERATOR || user.role === UserRoles.PROJECT_OWNER) && (
             <Menu.Item
               as={Link}
               to="/cross-projects"

@@ -57,7 +57,7 @@ export const selectActiveUsersTotal = createSelector(orm, ({ User }) =>
 
 export const selectActiveAdminOrProjectOwnerUsers = createSelector(orm, ({ User }) =>
   User.getActiveQuerySet()
-    .filter((user) => isUserAdminOrProjectOwner(user) || user.role === 'moderator')
+    .filter((user) => isUserAdminOrProjectOwner(user))
     .toRefArray(),
 );
 

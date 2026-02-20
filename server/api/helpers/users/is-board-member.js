@@ -16,13 +16,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    // === ДАЕМ ПРАВА МОДЕРАТОРУ ===
-    const user = await User.findOne({ id: inputs.id });
-    if (user && (user.role === 'admin' || user.role === 'moderator')) {
-      return true;
-    }
-    // =============================
-
     const boardMembership = await BoardMembership.qm.getOneByBoardIdAndUserId(
       inputs.boardId,
       inputs.id,

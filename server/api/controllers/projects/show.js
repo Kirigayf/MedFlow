@@ -139,9 +139,7 @@ module.exports = {
     );
 
     let boards;
-    // === ПРАВКА: Добавляем роль MODERATOR в условие обхода ограничений ===
-    // Если пользователь не Админ и не Модератор, проверяем его права менеджера или участника
-    if (![User.Roles.ADMIN, 'moderator'].includes(currentUser.role) || project.ownerProjectManagerId) {
+    if (currentUser.role !== User.Roles.ADMIN || project.ownerProjectManagerId) {
       if (!isProjectManager) {
         if (boardMemberships.length === 0) {
           throw Errors.PROJECT_NOT_FOUND; // Forbidden
@@ -172,9 +170,8 @@ module.exports = {
       await CustomField.qm.getByBaseCustomFieldGroupIds(baseCustomFieldGroupsIds);
 
     let notificationServices = [];
-    // === ПРАВКА: Разрешаем Модератору видеть сервисы уведомлений ===
-    if (isProjectManager || currentUser.role === 'moderator' || currentUser.role === User.Roles.ADMIN) {
-      const boardIds = sails.helpers.utils.mapRecords(boards); // Исправлено: добавлено const
+    if (isProjectManager) {
+      boardIds = sails.helpers.utils.mapRecords(boards);
       notificationServices = await NotificationService.qm.getByBoardIds(boardIds);
     }
 

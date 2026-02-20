@@ -72,7 +72,7 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
     
     // 1. Ищем по приоритетным названиям
     for (const name of PREFERRED_LIST_NAMES) {
-      const found = board.lists.find(l => l.name.toLowerCase() === name.toLowerCase());
+      const found = board.lists.find(l => l.name?.toLowerCase() === name.toLowerCase());
       if (found) return found.id;
     }
     
@@ -160,7 +160,7 @@ const CreateMasterTaskModal = ({ open, onClose, onCreate }) => {
     const lowerFilter = filterText.toLowerCase();
 
     return dataTree.reduce((acc, project) => {
-      const projectMatches = project.name.toLowerCase().includes(lowerFilter);
+      const projectMatches = project.name?.toLowerCase().includes(lowerFilter);
       const matchingBoards = project.boards.filter(b => b.name.toLowerCase().includes(lowerFilter));
       
       if (projectMatches) {

@@ -14,8 +14,6 @@ import UserActionsStep from '../../users/UserActionsStep';
 import NotificationsStep from '../../notifications/NotificationsStep';
 import logoImageWhite from '../../../assets/images/white_logo.png';
 
-import { isUserAdminOrProjectOwner } from '../../utils/record-helpers';
-
 import styles from './Header.module.scss';
 import { User } from '../../../models';
 

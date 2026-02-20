@@ -70,14 +70,11 @@ const CrossProjectDashboard = () => {
 
   // === НОВАЯ ФУНКЦИЯ: Открытие модалки карточки ===
   const handleOpenTask = (task) => {
-    // Ищем любую карточку, привязанную к этой мастер-задаче
-    const linkedCard = allCards.find(c => c.masterTaskId === task.id);
-    
-    if (linkedCard) {
-      // Переходим по стандартному пути Planka для открытия карточки
-      history.push(`/boards/${linkedCard.boardId}/cards/${linkedCard.id}`);
+    // Теперь мы берем ID прямо из того, что прислал сервер!
+    if (task.linkedBoardId && task.linkedCardId) {
+      history.push(`/boards/${task.linkedBoardId}/cards/${task.linkedCardId}`);
     } else {
-      alert('Связанная карточка не найдена. Возможно, она удалена с доски или у вас нет к ней доступа.');
+      alert('Связанная карточка не найдена. Возможно, она удалена с досок.');
     }
   };
 

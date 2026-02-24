@@ -90,11 +90,11 @@
 
   .title {
     bottom: 0;
-    display: -webkit-box;
+    display: block;
     hyphens: auto;
     left: 0;
     line-height: 1.1;
-    overflow: hidden;
+    overflow: visible;
     position: absolute;
     word-break: break-word;
     -webkit-box-orient: vertical;

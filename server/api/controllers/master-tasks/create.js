@@ -41,10 +41,11 @@ module.exports = {
           .filter(userId => userId !== currentUser.id);
 
         if (userIdsToNotify.length > 0) {
-          // 1. Ищем действие (Action), которое Planka уже сама создала секунду назад
-          const action = await Action.findOne({ cardId: card.id }).sort('createdAt DESC');
+          // 1. Ищем список действий, сортируем по убыванию даты и берем самое новое (limit: 1)
+          const actions = await Action.find({ cardId: card.id }).sort('createdAt DESC').limit(1);
+          const action = actions.length > 0 ? actions[0] : null;
           
-          if (!action) continue; // На всякий случай: если действия нет, пропускаем
+          if (!action) continue; 
 
           // 2. Генерируем уведомления (привязываем к реальному системному действию)
           const notificationsToCreate = userIdsToNotify.map(userId => ({

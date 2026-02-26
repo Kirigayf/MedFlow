@@ -3,8 +3,6 @@ module.exports = {
     name: { type: 'string', required: true },
     description: { type: 'string' },
     targets: { type: 'json', required: true }, 
-    
-    // 1. ДОБАВЛЯЕМ РАЗРЕШЕНИЕ НА ПРИЕМ МЕТОК
     labels: { type: 'json' } 
   },
 
@@ -26,7 +24,7 @@ module.exports = {
       request: this.req,
     });
 
-    // === НАЧАЛО: Рассылка уведомлений для кросс-проектных задач ===
+    // === НАЧАЛО: Отправка уведомлений в Telegram ===
     try {
       const createdCards = await Card.find({ masterTaskId: masterTask.id });
 
@@ -34,6 +32,7 @@ module.exports = {
         const board = await Board.findOne({ id: card.boardId });
         if (!board) continue;
         
+        const project = await Project.findOne({ id: board.projectId });
         const boardMemberships = await BoardMembership.find({ boardId: board.id });
         
         const userIdsToNotify = boardMemberships
@@ -41,38 +40,49 @@ module.exports = {
           .filter(userId => userId !== currentUser.id);
 
         if (userIdsToNotify.length > 0) {
-          // 1. Ищем список действий, сортируем по убыванию даты и берем самое новое (limit: 1)
-          const actions = await Action.find({ cardId: card.id }).sort('createdAt DESC').limit(1);
-          const action = actions.length > 0 ? actions[0] : null;
-          
-          if (!action) continue; 
+          const usersToNotify = await User.find({ id: userIdsToNotify });
 
-          // 2. Генерируем уведомления (привязываем к реальному системному действию)
-          const notificationsToCreate = userIdsToNotify.map(userId => ({
-            userId: userId,
-            actionId: action.id, 
-            cardId: card.id,
-            isRead: false,
-            type: 'addMemberToCard' 
-          }));
-          
-          // .fetch() нужен, чтобы получить сгенерированные ID уведомлений
-          const createdNotifications = await Notification.createEach(notificationsToCreate).fetch();
+          // 1. ВСТАВЬТЕ СЮДА ТОКЕН ВАШЕГО БОТА (от @BotFather)
+          const TELEGRAM_BOT_TOKEN = '1234567890:AAH_Ваш_Длинный_Токен_Здесь';
 
-          // 3. Отправляем WebSocket-сигналы, чтобы колокольчик загорелся в реальном времени
-          createdNotifications.forEach(notification => {
-            sails.sockets.broadcast(
-              `user:${notification.userId}`,
-              'notificationCreate', 
-              { item: notification }
-            );
-          });
+          // 2. СЛОВАРЬ СОПОСТАВЛЕНИЯ ПОЛЬЗОВАТЕЛЕЙ
+          // Слева: ID пользователя в вашей Planka
+          // Справа: chat_id этого человека в Telegram (можно узнать через бота @userinfobot)
+          const telegramChatIds = {
+            '1': '1122334455', // Например, это вы (Админ)
+            '2': '9988776655', // Какой-то другой участник
+            // 'ID_В_PLANKA': 'CHAT_ID_В_ТЕЛЕГРАМ'
+          };
+
+          for (const user of usersToNotify) {
+            // Ищем chat_id пользователя в нашем словаре
+            const chatId = telegramChatIds[user.id]; 
+            
+            // Если для пользователя не указан chat_id, просто пропускаем его
+            if (!chatId) continue;
+
+            // Формируем красивый текст сообщения (Telegram поддерживает разметку Markdown)
+            const messageText = `🔔 *Новая задача!*\n\n*Проект:* ${project.name}\n*Доска:* ${board.name}\n*Задача:* ${masterTask.name}\n*Создал:* ${currentUser.name || currentUser.email}`;
+
+            // Отправляем HTTP-запрос серверам Telegram
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: chatId,
+                text: messageText,
+                parse_mode: 'Markdown' // Включаем поддержку жирного шрифта (*)
+              })
+            });
+          }
         }
       }
     } catch (err) {
-      console.error('Ошибка при рассылке уведомлений о кросс-проектной задаче:', err);
+      // Если у Telegram сбой или нет интернета, система просто запишет ошибку в лог,
+      // но задача всё равно будет успешно создана.
+      console.error('Ошибка при отправке уведомлений в Telegram:', err);
     }
-    // === КОНЕЦ: Рассылка уведомлений ===
+    // === КОНЕЦ: Отправка уведомлений в Telegram ===
 
     return {
       item: masterTask,

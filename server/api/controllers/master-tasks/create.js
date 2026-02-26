@@ -2,7 +2,7 @@ module.exports = {
   inputs: {
     name: { type: 'string', required: true },
     description: { type: 'string' },
-    targets: { type: 'json', required: true }, // [{ listId: '...' }]
+    targets: { type: 'json', required: true }, 
     
     // 1. ДОБАВЛЯЕМ РАЗРЕШЕНИЕ НА ПРИЕМ МЕТОК
     labels: { type: 'json' } 
@@ -32,11 +32,8 @@ module.exports = {
 
       for (const card of createdCards) {
         const board = await Board.findOne({ id: card.boardId });
-        const list = await List.findOne({ id: card.listId });
-        if (!board || !list) continue;
+        if (!board) continue;
         
-        const project = await Project.findOne({ id: board.projectId });
-
         const boardMemberships = await BoardMembership.find({ boardId: board.id });
         
         const userIdsToNotify = boardMemberships
@@ -44,36 +41,29 @@ module.exports = {
           .filter(userId => userId !== currentUser.id);
 
         if (userIdsToNotify.length > 0) {
-          // Действие в истории оставляем настоящим (создание карточки)
-          const action = await Action.create({
-            type: 'createCard',
-            data: {
-              card: { id: card.id, name: card.name },
-              list: { id: list.id, name: list.name },
-              board: { id: board.id, name: board.name },
-              project: { id: project.id, name: project.name }
-            },
-            userId: currentUser.id,
-            cardId: card.id,
-            boardId: board.id
-          }).fetch();
+          // 1. Ищем действие (Action), которое Planka уже сама создала секунду назад
+          const action = await Action.findOne({ cardId: card.id }).sort('createdAt DESC');
+          
+          if (!action) continue; // На всякий случай: если действия нет, пропускаем
 
-          // А само уведомление маскируем под разрешенный базой тип
+          // 2. Генерируем уведомления (привязываем к реальному системному действию)
           const notificationsToCreate = userIdsToNotify.map(userId => ({
             userId: userId,
-            actionId: action.id,
+            actionId: action.id, 
             cardId: card.id,
             isRead: false,
-            type: 'addMemberToCard' // <--- ИСПРАВЛЕНИЕ: Используем разрешенный тип
+            type: 'addMemberToCard' 
           }));
           
-          await Notification.createEach(notificationsToCreate);
+          // .fetch() нужен, чтобы получить сгенерированные ID уведомлений
+          const createdNotifications = await Notification.createEach(notificationsToCreate).fetch();
 
-          userIdsToNotify.forEach(userId => {
+          // 3. Отправляем WebSocket-сигналы, чтобы колокольчик загорелся в реальном времени
+          createdNotifications.forEach(notification => {
             sails.sockets.broadcast(
-              `user:${userId}`,
-              'actionCreate',
-              { item: action }
+              `user:${notification.userId}`,
+              'notificationCreate', 
+              { item: notification }
             );
           });
         }

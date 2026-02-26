@@ -224,7 +224,7 @@ module.exports = {
         }
 
         // --- ВАЖНО: ВСТАВЬТЕ СЮДА ТОКЕН ВАШЕГО БОТА ---
-        const TELEGRAM_BOT_TOKEN = '1234567890:AAH_Ваш_Длинный_Токен_Здесь';
+        const TELEGRAM_BOT_TOKEN = '8614492190:AAGlOJxBr_WgXLZ6UOrDTBE9J4FJosBQHJ0';
 
         // Отправляем запрос в Телеграм
         await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {

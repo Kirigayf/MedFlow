@@ -156,4 +156,90 @@ module.exports = {
       columnName: 'action_id',
     },
   },
+
+  // === ГЛОБАЛЬНЫЙ ПЕРЕХВАТЧИК УВЕДОМЛЕНИЙ ===
+  // Срабатывает каждый раз, когда кто-то в системе должен получить колокольчик
+  afterCreate: function (newlyCreatedRecord, proceed) {
+    // 1. Сразу даем команду базе данных продолжить работу (чтобы интерфейс пользователя не зависал)
+    proceed();
+
+    // 2. Запускаем логику отправки в Телеграм в фоновом режиме
+    (async () => {
+      try {
+        // Ищем пользователя, которому летит колокольчик
+        const user = await User.findOne({ id: newlyCreatedRecord.userId });
+        if (!user) return;
+
+        // Берем Telegram ID из профиля (поле phone или username)
+        const chatId = user.phone || user.username;
+        if (!chatId || !/^\d+$/.test(chatId)) return; // Проверка на цифры
+
+        // Выясняем, кто инициатор
+        let creatorName = 'Кто-то';
+        if (newlyCreatedRecord.creatorUserId) {
+          const creator = await User.findOne({ id: newlyCreatedRecord.creatorUserId });
+          if (creator) creatorName = creator.name || creator.email || creator.username;
+        }
+
+        // Выясняем название доски (для контекста)
+        let boardName = 'Неизвестная доска';
+        if (newlyCreatedRecord.boardId) {
+          const board = await Board.findOne({ id: newlyCreatedRecord.boardId });
+          if (board) boardName = board.name;
+        }
+
+        // Достаем название карточки из данных уведомления
+        const data = newlyCreatedRecord.data || {};
+        const cardName = data.card ? data.card.name : 'карточка';
+
+        // Переводим системный тип уведомления на человеческий язык
+        let actionText = '';
+        switch (newlyCreatedRecord.type) {
+          case Types.MOVE_CARD:
+            actionText = 'переместил(а) карточку';
+            break;
+          case Types.COMMENT_CARD:
+            actionText = 'оставил(а) комментарий к карточке';
+            break;
+          case Types.ADD_MEMBER_TO_CARD:
+            actionText = 'назначил(а) вас на задачу';
+            break;
+          case Types.MENTION_IN_COMMENT:
+            actionText = 'упомянул(а) вас в комментарии';
+            break;
+          default:
+            actionText = 'обновил(а) карточку';
+        }
+
+        // Формируем красивое сообщение
+        let messageText = `🔔 *Dелай: Новое уведомление*\n\n`;
+        messageText += `*Кто:* ${creatorName}\n`;
+        messageText += `*Действие:* ${actionText}\n`;
+        messageText += `*Доска:* ${boardName}\n`;
+        messageText += `*Карточка:* ${cardName}\n`;
+
+        // Если в уведомлении есть текст комментария — добавляем его
+        if (data.text) {
+          messageText += `\n*Текст:* _${data.text}_`;
+        }
+
+        // --- ВАЖНО: ВСТАВЬТЕ СЮДА ТОКЕН ВАШЕГО БОТА ---
+        const TELEGRAM_BOT_TOKEN = '1234567890:AAH_Ваш_Длинный_Токен_Здесь';
+
+        // Отправляем запрос в Телеграм
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: messageText,
+            parse_mode: 'Markdown'
+          })
+        });
+
+      } catch (err) {
+        console.error('Ошибка глобального перехватчика Telegram:', err);
+      }
+    })();
+  },
 };

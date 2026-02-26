@@ -69,7 +69,8 @@ module.exports = {
             userId: userId,
             actionId: action.id,
             cardId: card.id,
-            isRead: false
+            isRead: false,
+            type: 'createCard'
           }));
           
           await Notification.createEach(notificationsToCreate);

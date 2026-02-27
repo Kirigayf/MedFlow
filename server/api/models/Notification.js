@@ -100,10 +100,6 @@ module.exports = {
   Types,
 
   attributes: {
-    //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
-    //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
-    //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
-
     type: {
       type: 'string',
       isIn: Object.values(Types),
@@ -119,14 +115,6 @@ module.exports = {
       columnName: 'is_read',
     },
 
-    //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
-    //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
-    //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-
-    //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
-    //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
-    //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
     userId: {
       model: 'User',
       required: true,
@@ -136,7 +124,6 @@ module.exports = {
       model: 'User',
       columnName: 'creator_user_id',
     },
-    // Denormalization
     boardId: {
       model: 'Board',
       required: true,
@@ -157,42 +144,34 @@ module.exports = {
     },
   },
 
-  // === ГЛОБАЛЬНЫЙ ПЕРЕХВАТЧИК УВЕДОМЛЕНИЙ ===
-  // Срабатывает каждый раз, когда кто-то в системе должен получить колокольчик
+  // === ГЛОБАЛЬНЫЙ ПЕРЕХВАТЧИК УВЕДОМЛЕНИЙ MAX ===
   afterCreate: function (newlyCreatedRecord, proceed) {
-    // 1. Сразу даем команду базе данных продолжить работу (чтобы интерфейс пользователя не зависал)
-    proceed();
+    proceed(); // Отпускаем БД, чтобы интерфейс не ждал
 
-    // 2. Запускаем логику отправки в Телеграм в фоновом режиме
     (async () => {
       try {
-        // Ищем пользователя, которому летит колокольчик
         const user = await User.findOne({ id: newlyCreatedRecord.userId });
         if (!user) return;
 
-        // Берем Telegram ID из профиля (поле phone или username)
+        // Берем ID пользователя из профиля (поле phone или username)
         const chatId = user.phone || user.username;
-        if (!chatId || !/^\d+$/.test(chatId)) return; // Проверка на цифры
+        if (!chatId || !/^\d+$/.test(chatId)) return; 
 
-        // Выясняем, кто инициатор
         let creatorName = 'Кто-то';
         if (newlyCreatedRecord.creatorUserId) {
           const creator = await User.findOne({ id: newlyCreatedRecord.creatorUserId });
           if (creator) creatorName = creator.name || creator.email || creator.username;
         }
 
-        // Выясняем название доски (для контекста)
         let boardName = 'Неизвестная доска';
         if (newlyCreatedRecord.boardId) {
           const board = await Board.findOne({ id: newlyCreatedRecord.boardId });
           if (board) boardName = board.name;
         }
 
-        // Достаем название карточки из данных уведомления
         const data = newlyCreatedRecord.data || {};
         const cardName = data.card ? data.card.name : 'карточка';
 
-        // Переводим системный тип уведомления на человеческий язык
         let actionText = '';
         switch (newlyCreatedRecord.type) {
           case Types.MOVE_CARD:
@@ -211,34 +190,34 @@ module.exports = {
             actionText = 'обновил(а) карточку';
         }
 
-        // Формируем красивое сообщение
         let messageText = `🔔 *Dелай: Новое уведомление*\n\n`;
         messageText += `*Кто:* ${creatorName}\n`;
         messageText += `*Действие:* ${actionText}\n`;
         messageText += `*Доска:* ${boardName}\n`;
         messageText += `*Карточка:* ${cardName}\n`;
 
-        // Если в уведомлении есть текст комментария — добавляем его
         if (data.text) {
           messageText += `\n*Текст:* _${data.text}_`;
         }
 
-        // --- ВАЖНО: ВСТАВЬТЕ СЮДА ТОКЕН ВАШЕГО БОТА ---
-        const TELEGRAM_BOT_TOKEN = '8614492190:AAGlOJxBr_WgXLZ6UOrDTBE9J4FJosBQHJ0';
+        // --- ТОКЕН БОТА MAX ---
+        const MAX_BOT_TOKEN = 'f9LHodD0cOIwD-0N8IVM1Q11GW_Ozt8YYRJrSlffytvUAh6FrOsIr1naGp0yel0WIaCY0WhnYWOQcK6Dqdkx';
 
-        // Отправляем запрос в Телеграм
-        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        // Отправка в MAX
+        await fetch(`https://platform-api.max.ru/messages?user_id=${chatId}`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': MAX_BOT_TOKEN
+          },
           body: JSON.stringify({
-            chat_id: chatId,
             text: messageText,
-            parse_mode: 'Markdown'
+            format: 'markdown' // Max поддерживает markdown
           })
         });
 
       } catch (err) {
-        console.error('Ошибка глобального перехватчика Telegram:', err);
+        console.error('Ошибка глобального перехватчика Max:', err);
       }
     })();
   },

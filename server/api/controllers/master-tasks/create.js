@@ -24,7 +24,7 @@ module.exports = {
       request: this.req,
     });
 
-    // === НАЧАЛО: Отправка уведомлений в Telegram ===
+    // === НАЧАЛО: Отправка уведомлений в мессенджер MAX ===
     try {
       const createdCards = await Card.find({ masterTaskId: masterTask.id });
 
@@ -42,35 +42,36 @@ module.exports = {
         if (userIdsToNotify.length > 0) {
           const usersToNotify = await User.find({ id: userIdsToNotify });
 
-          // ВСТАВЬТЕ СЮДА ТОКЕН ВАШЕГО БОТА (от @BotFather)
-          const TELEGRAM_BOT_TOKEN = '8614492190:AAGlOJxBr_WgXLZ6UOrDTBE9J4FJosBQHJ0';
+          // --- ТОКЕН БОТА MAX ---
+          const MAX_BOT_TOKEN = 'f9LHodD0cOIwD-0N8IVM1Q11GW_Ozt8YYRJrSlffytvUAh6FrOsIr1naGp0yel0WIaCY0WhnYWOQcK6Dqdkx';
 
           for (const user of usersToNotify) {
-            // Берем ID из профиля: поле phone (если есть) или username
+            // Берем ID из профиля (phone или username)
             const chatId = user.phone || user.username; 
             
-            // Важная защита: проверяем, что поле не пустое и содержит ТОЛЬКО цифры.
-            // (Telegram chat_id всегда состоит только из цифр, например 1122334455)
             if (!chatId || !/^\d+$/.test(chatId)) continue;
 
-            const messageText = `🔔 *Новая задача!*\n\n*Проект:* ${project.name}\n*Доска:* ${board.name}\n*Задача:* ${masterTask.name}\n*Создал:* ${currentUser.name || currentUser.email}`;
+            const messageText = `🔔 *Новая кросс-проектная задача!*\n\n*Проект:* ${project.name}\n*Доска:* ${board.name}\n*Задача:* ${masterTask.name}\n*Создал:* ${currentUser.name || currentUser.email}`;
 
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            // Отправка запроса в API MAX
+            await fetch(`https://platform-api.max.ru/messages?user_id=${chatId}`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': MAX_BOT_TOKEN
+              },
               body: JSON.stringify({
-                chat_id: chatId,
                 text: messageText,
-                parse_mode: 'Markdown'
+                format: 'markdown'
               })
             });
           }
         }
       }
     } catch (err) {
-      console.error('Ошибка при отправке уведомлений в Telegram:', err);
+      console.error('Ошибка при отправке уведомлений в Max:', err);
     }
-    // === КОНЕЦ: Отправка уведомлений в Telegram ===
+    // === КОНЕЦ: Отправка уведомлений в MAX ===
 
     return {
       item: masterTask,

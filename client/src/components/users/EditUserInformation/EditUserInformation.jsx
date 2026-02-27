@@ -81,7 +81,18 @@ const EditUserInformation = React.memo(({ id, onUpdate }) => {
         className={styles.field}
         onChange={handleFieldChange}
       />
-      <div className={styles.text}>{t('common.phone')}</div>
+      {/* === НАЧАЛО: КАСТОМНАЯ НАДПИСЬ ДЛЯ ID MAX === */}
+      <div className={styles.text}>
+        ID Max 
+        <span style={{ fontWeight: 'normal', textTransform: 'none', marginLeft: '8px', color: '#8993a4' }}>
+          (
+          <a href="https://max.ru/delaymiac_bot" target="_blank" rel="noopener noreferrer" style={{ color: '#0079bf', textDecoration: 'underline' }}>Бот для уведомлений</a>
+          {' | '}
+          <a href="https://max.ru/id222312277810_1_bot" target="_blank" rel="noopener noreferrer" style={{ color: '#0079bf', textDecoration: 'underline' }}>Узнать свой ID</a>
+          )
+        </span>
+      </div>
+      {/* === КОНЕЦ: КАСТОМНАЯ НАДПИСЬ === */}
       <Input
         fluid
         name="phone"
